@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.SQL", "Data.SQL\Data.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{5AE63B28-6B57-46C0-8501-D7035A9A969D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Cache", "Data.Cache\Data.Cache.csproj", "{C277D17D-62D3-4920-BB7A-AA4C3F528E20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5AE63B28-6B57-46C0-8501-D7035A9A969D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AE63B28-6B57-46C0-8501-D7035A9A969D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AE63B28-6B57-46C0-8501-D7035A9A969D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C277D17D-62D3-4920-BB7A-AA4C3F528E20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C277D17D-62D3-4920-BB7A-AA4C3F528E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C277D17D-62D3-4920-BB7A-AA4C3F528E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C277D17D-62D3-4920-BB7A-AA4C3F528E20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
