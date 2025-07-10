@@ -37,6 +37,33 @@ namespace Data.SQL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Banks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "Mono"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "Privat24"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "Vostok"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Name = "Bvr"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Name = "Mtb"
+                        });
                 });
 
             modelBuilder.Entity("Data.SQL.Models.Payment", b =>

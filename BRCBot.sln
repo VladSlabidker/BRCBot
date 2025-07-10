@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Cache", "Data.Cache\Data.Cache.csproj", "{C277D17D-62D3-4920-BB7A-AA4C3F528E20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrService", "OcrService\OcrService.csproj", "{040D6B0D-3359-4440-8F22-55115E4892B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{C277D17D-62D3-4920-BB7A-AA4C3F528E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C277D17D-62D3-4920-BB7A-AA4C3F528E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C277D17D-62D3-4920-BB7A-AA4C3F528E20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{040D6B0D-3359-4440-8F22-55115E4892B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{040D6B0D-3359-4440-8F22-55115E4892B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{040D6B0D-3359-4440-8F22-55115E4892B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{040D6B0D-3359-4440-8F22-55115E4892B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

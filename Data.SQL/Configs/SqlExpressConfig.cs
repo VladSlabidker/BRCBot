@@ -2,13 +2,13 @@ namespace Data.SQL.Configs;
 
 public sealed class SqlExpressConfig
 {
-    public string DataSource { get; init; } = default!;
+    public string? DataSource { get; init; }
 
-    public string InitialCatalog { get; init; } = default!;
+    public string? InitialCatalog { get; init; }
 
-    public bool IntegratedSecurity { get; init; } = true;
+    public bool IntegratedSecurity { get; init; }
 
-    public bool TrustServerCertificate { get; init; } = true;
+    public bool TrustServerCertificate { get; init; }
     
-    public string? Password { get; init; } = string.Empty;
+    public string? Password { get; init; }
 }

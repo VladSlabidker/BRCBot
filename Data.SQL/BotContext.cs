@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using Common.Enums;
 using Data.SQL.Configs;
 using Data.SQL.Models;
 using Microsoft.EntityFrameworkCore;
@@ -79,5 +80,11 @@ public class BotContext: DbContext
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
+
+        modelBuilder.Entity<Bank>().HasData(Enum.GetValues<BankType>().Select(e => new Bank()
+        {
+            Id = (int)e, 
+            Name = e.ToString()
+        }));
     }
 }
