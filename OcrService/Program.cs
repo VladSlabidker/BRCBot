@@ -1,4 +1,5 @@
 
+using Microsoft.Extensions.Options;
 using OcrService.Configs;
 using Tesseract;
 
@@ -13,7 +14,7 @@ builder.Services.Configure<OcrConfig>(builder.Configuration.GetSection(nameof(Oc
 
 builder.Services.AddScoped<TesseractEngine>(provider =>
 {
-    var config = provider.GetRequiredService<OcrConfig>();
+    var config = provider.GetRequiredService<IOptions<OcrConfig>>().Value;
     return new TesseractEngine(config.TessDataPath, config.Languages, EngineMode.Default);
 });
 
