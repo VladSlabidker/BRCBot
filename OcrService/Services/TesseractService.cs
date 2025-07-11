@@ -3,6 +3,7 @@ using Common.Enums;
 using OcrService.Interfaces;
 using OcrService.Models;
 using Tesseract;
+using static OcrService.Services.BankReceiptParserService;
 
 namespace OcrService.Services;
 
@@ -16,7 +17,9 @@ public class TesseractService: IOcrService
         { "восток", BankType.Vostok },
         { "мтб", BankType.Mtb },
         { "mtb", BankType.Mtb },
-        { "mono", BankType.Mono }
+        { "mono", BankType.Mono },
+        { "universal", BankType.Mono },
+        { "privat", BankType.Mono },
     };
     
     private readonly TesseractEngine _tesseractEngine;
@@ -26,8 +29,11 @@ public class TesseractService: IOcrService
         _tesseractEngine = tesseractEngine;
     }
     
-    public Receipt GetReceiptFromImage(string base64)
+    public async Task<Receipt> GetReceiptFromImageAsync(string base64, CancellationToken cancellationToken)
     {
+        if(cancellationToken.IsCancellationRequested)
+            return Task.FromCanceled<Receipt>(cancellationToken).Result;
+        
         // Очистка base64, если с префиксом
         if (base64.Contains(",")) base64 = base64.Split(',')[1];
 
@@ -36,7 +42,7 @@ public class TesseractService: IOcrService
         using var page = _tesseractEngine.Process(pix);
         var text = page.GetText();
 
-        const string pattern = @"\b(?:Приватбанк|Універсал\s*банк|Банк\s*Власний\s*Рахунок|Банк\s*Восток|МТБ\s*Банк|MTB\s*Bank|monobank)\b";
+        const string pattern = @"\b(?:Приватбанк|Універсал\s*банк|Банк\s*Власний\s*Рахунок|Банк\s*Восток|Восток\s*Банк|МТБ\s*Банк|MTB\s*Bank|monobank|Universal\s*Bank|privatbank)\b";
         var bankName = Regex.Match(text, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         
         if (bankName.Success)
@@ -44,7 +50,7 @@ public class TesseractService: IOcrService
             string name = NormalizeBankName(bankName.Value);
 
             if (_bankNameMap.TryGetValue(name, out var bankType))
-                return ParseReceiptFromText(bankType);
+                return ParseReceiptFromText(bankType, text);
             else 
                 throw new InvalidDataException($"{name} is not a valid bank name");
         }
@@ -60,6 +66,8 @@ public class TesseractService: IOcrService
         // Приводим к нижнему регистру и убираем лишние пробелы
         raw = raw.ToLowerInvariant();
         raw = Regex.Replace(raw, @"\s+", " ").Trim();
+        
+        raw = Regex.Replace(raw, @"\bmonobank\b", "mono банк", RegexOptions.IgnoreCase);
 
         // Разделяем слитные слова: приватбанк -> приват банк и банкприват -> приват банк
         raw = Regex.Replace(raw, @"(приват|універсал|власний рахунок|восток|мтб|mtb|mono)(банк)", "$1 банк", RegexOptions.IgnoreCase);
@@ -75,14 +83,13 @@ public class TesseractService: IOcrService
         return cleanName;
     }
     
-    private Receipt ParseReceiptFromText(BankType bankType) => 
+    private Receipt ParseReceiptFromText(BankType bankType, string text) => 
         bankType switch
         {
-            BankType.Mono => new Receipt(),
-            BankType.Privat24 => new Receipt(),
-            BankType.Vostok => new Receipt(),
-            BankType.Bvr => new Receipt(),
-            BankType.Mtb => new Receipt(),
+            BankType.Mono => ParseMonoReceipt(bankType, text),
+            BankType.Privat24 => ParsePrivat24Receipt(bankType, text),
+            BankType.Vostok or BankType.Bvr => ParseVostokReceipt(bankType, text),
+            BankType.Mtb => ParseMtbReceipt(bankType, text),
             _ => throw new InvalidDataException($"{bankType} is not a valid bank name")
         };
 }

@@ -98,8 +98,8 @@ namespace Data.SQL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<long>("BankId")
                         .HasColumnType("bigint");
@@ -114,17 +114,12 @@ namespace Data.SQL.Migrations
                     b.Property<bool>("IsValid")
                         .HasColumnType("bit");
 
-                    b.Property<byte>("LastFour")
-                        .HasColumnType("tinyint");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("LastFour")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BankId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Receipts");
                 });
@@ -207,15 +202,7 @@ namespace Data.SQL.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Data.SQL.Models.User", "User")
-                        .WithMany("Receipts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Bank");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.SQL.Models.Subscription", b =>
@@ -245,8 +232,6 @@ namespace Data.SQL.Migrations
             modelBuilder.Entity("Data.SQL.Models.User", b =>
                 {
                     b.Navigation("Payments");
-
-                    b.Navigation("Receipts");
 
                     b.Navigation("Subscriptions");
                 });

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "RpcOcrService";
+
+package ocrService;
+
+service RpcOcrService {
+   rpc GetReceiptFromImage(RpcGetRecieptFromImageRequest) returns (RpcReceipt);
+}
+
+message RpcGetRecieptFromImageRequest {
+  string base64String = 1;
+}
+
+message RpcReceipt {
+  int64 id = 1;
+  int64 bankId = 2;
+  string code = 3;
+  double amount = 4;
+  bool isValid = 5;
+  int32 LastFour = 6;
+  google.protobuf.Timestamp checkedAt = 7;
+}

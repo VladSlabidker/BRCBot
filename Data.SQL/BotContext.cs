@@ -48,11 +48,6 @@ public class BotContext: DbContext
     {
         modelBuilder.Entity<Receipt>(e =>
         {
-            e.HasOne(r => r.User)
-                .WithMany(u => u.Receipts)        
-                .HasForeignKey(r => r.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
-
             e.HasOne(r => r.Bank)
                 .WithMany()
                 .HasForeignKey(r => r.BankId)

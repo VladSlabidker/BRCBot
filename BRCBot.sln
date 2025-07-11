@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Cache", "Data.Cache\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrService", "OcrService\OcrService.csproj", "{040D6B0D-3359-4440-8F22-55115E4892B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storefront", "Storefront\Storefront.csproj", "{21615080-8274-4562-803B-DDD6C8739EA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{040D6B0D-3359-4440-8F22-55115E4892B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{040D6B0D-3359-4440-8F22-55115E4892B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{040D6B0D-3359-4440-8F22-55115E4892B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21615080-8274-4562-803B-DDD6C8739EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21615080-8274-4562-803B-DDD6C8739EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21615080-8274-4562-803B-DDD6C8739EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21615080-8274-4562-803B-DDD6C8739EA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

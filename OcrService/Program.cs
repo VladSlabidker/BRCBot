@@ -1,6 +1,9 @@
 
 using Microsoft.Extensions.Options;
 using OcrService.Configs;
+using OcrService.Profiles;
+using OcrService.Services;
+using OcrService.Services.gRPC;
 using Tesseract;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +21,13 @@ builder.Services.AddScoped<TesseractEngine>(provider =>
     return new TesseractEngine(config.TessDataPath, config.Languages, EngineMode.Default);
 });
 
+builder.Services.AddScoped<TesseractService>();
+builder.Services.AddGrpc();
+builder.Services.AddAutoMapper(typeof(OcrProfile));
+
 var app = builder.Build();
+
+app.MapGrpcService<RpcTesseractService>();
 
 app.MapGet("/",
     () =>

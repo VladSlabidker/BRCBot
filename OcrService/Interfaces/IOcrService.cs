@@ -4,5 +4,5 @@ namespace OcrService.Interfaces;
 
 public interface IOcrService
 {
-    public Receipt GetReceiptFromImage(string base64);
+    public Task<Receipt> GetReceiptFromImageAsync(string base64, CancellationToken cancellationToken);
 }

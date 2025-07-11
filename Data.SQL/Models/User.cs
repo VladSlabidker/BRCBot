@@ -12,8 +12,6 @@ public class User
     
     public bool IsBlocked { get; set; }
     
-    public ICollection<Receipt> Receipts { get; set; }
-    
     public ICollection<Subscription> Subscriptions { get; set; }
     
     public ICollection<Payment> Payments { get; set; }
