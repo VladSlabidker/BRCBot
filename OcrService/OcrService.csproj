@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="..\Common\Protos\OcrService\ocrService.proto" GrpcServices="Server" />
+        <Protobuf Include="..\Common\Protos\OcrService\ocrService.proto" GrpcServices="Server" Link="Protos\OcrService\ocrService.proto" />
     </ItemGroup>
 
 </Project>

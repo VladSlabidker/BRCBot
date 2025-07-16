@@ -16,9 +16,9 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
-    
-    <ItemGroup>
-        <Protobuf Include="Protos\**\*.proto" GrpcServices="None" />
-    </ItemGroup>
 
+    <ItemGroup>
+        <Protobuf Include="Protos\**\*.proto" GrpcServices="None" AdditionalImportDirs="Protos" />
+    </ItemGroup>
+    
 </Project>

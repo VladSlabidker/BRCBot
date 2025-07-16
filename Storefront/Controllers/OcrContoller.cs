@@ -1,10 +1,7 @@
 using AutoMapper;
-using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
-using OcrService.Models;
-using OcrService.Services.gRPC;
 using RpcOcrService;
-using static RpcOcrService.RpcOcrService.RpcOcrServiceClient;
+using Storefront.Models.OcrService;
 
 namespace Storefront.Controllers;
 
@@ -24,18 +21,12 @@ public class OcrContoller : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetReceipt([FromBody]byte[] image)
     {
-        var base64string = Convert.ToBase64String(image);
+        string base64string = Convert.ToBase64String(image);
 
         RpcGetRecieptFromImageRequest request = new() { Base64String = base64string };
-        var receipt = await _tesseractService.GetReceiptFromImageAsync(request);
-        
-        var result = new Receipt()
-        {
-            Amount = receipt.Amount,
-            BankId = receipt.BankId,
-            Code = receipt.Code,
-            LastFour = receipt.LastFour
-        };
+        RpcReceipt receipt = await _tesseractService.GetReceiptFromImageAsync(request);
+
+        Receipt result = _mapper.Map<Receipt>(receipt);
         
         return Ok(result);
     }

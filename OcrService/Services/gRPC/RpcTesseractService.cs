@@ -19,7 +19,6 @@ public class RpcTesseractService: RpcOcrServiceBase
     
     public override async Task<RpcReceipt> GetReceiptFromImage(RpcGetRecieptFromImageRequest request, ServerCallContext context)
     {
-        //TODO: Fix Mapper
         Receipt receipt = await _tesseractService.GetReceiptFromImageAsync(request.Base64String, context.CancellationToken);
         RpcReceipt result = _mapper.Map<RpcReceipt>(receipt);
         

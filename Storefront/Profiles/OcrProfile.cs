@@ -1,5 +1,5 @@
 using AutoMapper;
-using OcrService.Models;
+using Storefront.Models.OcrService;
 using RpcOcrService;
 
 namespace Storefront.Profiles;
@@ -8,6 +8,7 @@ public class OcrProfile : Profile
 {
     public OcrProfile()
     {
-        CreateMap<Receipt, RpcReceipt>().ReverseMap();
+        CreateMap<RpcReceipt, Receipt>()
+            .ForMember(dest => dest.CheckedAt, opt => opt.MapFrom(src => src.CheckedAt.ToDateTime()));
     }
 }

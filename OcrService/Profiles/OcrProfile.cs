@@ -1,4 +1,5 @@
 using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using OcrService.Models;
 using RpcOcrService;
 
@@ -8,6 +9,8 @@ public class OcrProfile: Profile
 {
     public OcrProfile()
     {
-        CreateMap<RpcReceipt, Receipt>().ReverseMap();
+        CreateMap<Receipt, RpcReceipt>()
+            .ForMember(dest => dest.CheckedAt,
+                opt => opt.MapFrom(src => Timestamp.FromDateTime(DateTime.SpecifyKind(src.CheckedAt, DateTimeKind.Utc))));
     }
 }

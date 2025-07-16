@@ -1,4 +1,4 @@
-using OcrService.Profiles;
+using Storefront.Profiles;
 using Storefront.Configs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +9,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
-builder.Services.AddAutoMapper((typeof(OcrProfile)));
 
 builder.Configuration.AddJsonFile("appsettings.Development.json");
 
@@ -22,6 +21,8 @@ builder.Services.AddGrpcClient<RpcOcrService.RpcOcrService.RpcOcrServiceClient>(
         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
     };
 });
+
+builder.Services.AddAutoMapper(typeof(OcrProfile));
 
 var app = builder.Build();
 

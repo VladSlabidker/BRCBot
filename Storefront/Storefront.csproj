@@ -27,7 +27,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="..\Common\Protos\OcrService\ocrService.proto" GrpcServices="Client" />
+        <Protobuf Include="..\Common\Protos\OcrService\ocrService.proto" GrpcServices="Client" Link="Protos\OcrService\ocrService.proto" AdditionalImportDirs="..\Common\Protos"/>
+        <Protobuf Include="..\Common\Protos\CheckerService\checkerService.proto" GrpcServices="Client" Link="Protos\CheckerService\checkerService.proto" AdditionalImportDirs="..\Common\Protos"/>
     </ItemGroup>
     
 </Project>
