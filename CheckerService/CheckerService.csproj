@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Grpc.AspNetCore" Version="2.57.0"/>
-        <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.71.0"/>
+        <PackageReference Include="Microsoft.Playwright" Version="1.53.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -21,6 +21,10 @@
     
     <ItemGroup>
         <Protobuf Include="..\Common\Protos\CheckerService\checkerService.proto" GrpcServices="Server" Link="Protos\CheckerService\checkerService.proto" AdditionalImportDirs="..\Common\Protos"/>
+    </ItemGroup>    
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Common\Common.csproj" />
     </ItemGroup>
     
 </Project>

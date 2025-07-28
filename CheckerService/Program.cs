@@ -1,4 +1,12 @@
 using CheckerService.Configs;
+/*
+using CheckerService.Services;
+using Common.Enums;
+
+var service = new ValidationService();
+var res = await service.ValidateReceiptAsync(BankType.Mono, "H4ХЕ-8РХМ-ВВТР-481А");
+Console.WriteLine(res);
+*/
 
 var builder = WebApplication.CreateBuilder(args);
 
