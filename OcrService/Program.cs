@@ -1,5 +1,3 @@
-
-using AutoMapper;
 using Microsoft.Extensions.Options;
 using OcrService.Configs;
 using OcrService.Profiles;

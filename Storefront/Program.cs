@@ -1,4 +1,3 @@
-using Storefront.Profiles;
 using Storefront.Configs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,8 +20,15 @@ builder.Services.AddGrpcClient<RpcOcrService.RpcOcrService.RpcOcrServiceClient>(
         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
     };
 });
+builder.Services.AddGrpcClient<RpcValidationService.RpcValidationService.RpcValidationServiceClient>(opt => opt.Address = configurationUri.ValidationService).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    return new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+});
 
-builder.Services.AddAutoMapper(typeof(OcrProfile));
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

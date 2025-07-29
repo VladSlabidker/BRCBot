@@ -1,4 +1,4 @@
-namespace CheckerService.Configs;
+namespace ValidationService.Configs;
 
 public class UriConfig
 {

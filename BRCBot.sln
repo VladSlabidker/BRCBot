@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrService", "OcrService\Oc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storefront", "Storefront\Storefront.csproj", "{21615080-8274-4562-803B-DDD6C8739EA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckerService", "CheckerService\CheckerService.csproj", "{86AF0760-1710-4424-BC7F-F216A785D565}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidationService", "ValidationService\ValidationService.csproj", "{86AF0760-1710-4424-BC7F-F216A785D565}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

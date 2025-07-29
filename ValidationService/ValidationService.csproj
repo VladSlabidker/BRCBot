@@ -17,14 +17,19 @@
 
     <ItemGroup>
         <Protobuf Include="..\Common\Protos\OcrService\ocrService.proto" GrpcServices="Client" Link="Protos\OcrService\ocrService.proto" AdditionalImportDirs="..\Common\Protos"/>
-    </ItemGroup>    
-    
+    </ItemGroup>
+    <PropertyGroup>
+        <PlaywrightBrowsersPath>0</PlaywrightBrowsersPath>
+    </PropertyGroup>
     <ItemGroup>
-        <Protobuf Include="..\Common\Protos\CheckerService\checkerService.proto" GrpcServices="Server" Link="Protos\CheckerService\checkerService.proto" AdditionalImportDirs="..\Common\Protos"/>
+        <Protobuf Include="..\Common\Protos\ValidationService\validationService.proto" GrpcServices="Server" Link="Protos\ValidationService\validationService.proto" AdditionalImportDirs="..\Common\Protos"/>
     </ItemGroup>    
     
     <ItemGroup>
       <ProjectReference Include="..\Common\Common.csproj" />
+      <ProjectReference Include="..\Data.Cache\Data.Cache.csproj" />
+      <ProjectReference Include="..\Data.SQL\Data.SQL.csproj" />
+      <ProjectReference Include="..\OcrService\OcrService.csproj" />
     </ItemGroup>
     
 </Project>
