@@ -6,7 +6,7 @@ public class Receipt
     
     public long BankId { get; set; }
     
-    public string Code { get; set; }
+    public string Code { get; set; } = string.Empty;
     
     public double Amount { get; set; }
     
@@ -15,4 +15,6 @@ public class Receipt
     public int LastFour { get; set; }
     
     public DateTime CheckedAt { get; set; }
+
+    public string Link { get; set; } = string.Empty;
 }
