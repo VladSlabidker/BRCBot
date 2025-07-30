@@ -51,7 +51,6 @@ public class ValidationService: IValidationService
             CheckedAt = DateTime.UtcNow.ToTimestamp(),
             BankId = ocrData.BankId,
             IsValid = true,
-            LastFour = ocrData.LastFour,
             Link = result.Item2
         };
         

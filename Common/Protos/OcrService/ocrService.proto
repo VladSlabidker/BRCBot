@@ -21,7 +21,6 @@ message RpcReceipt {
   string code = 3;
   double amount = 4;
   bool isValid = 5;
-  int32 LastFour = 6;
-  google.protobuf.Timestamp checkedAt = 7;
-  google.protobuf.StringValue link = 8;
+  google.protobuf.Timestamp checkedAt = 6;
+  google.protobuf.StringValue link = 7;
 }
