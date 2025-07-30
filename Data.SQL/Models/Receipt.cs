@@ -12,8 +12,6 @@ public class Receipt
     
     public bool IsValid { get; set; }
     
-    public int LastFour { get; set; }
-    
     public string? Link { get; set; }
     
     public DateTime CheckedAt { get; set; }

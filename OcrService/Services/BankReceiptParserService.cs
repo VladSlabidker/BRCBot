@@ -30,15 +30,7 @@ public static class BankReceiptParserService
             if (double.TryParse(amountStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var amount))
                 receipt.Amount = amount;
         }
-        
-        // Пример: "444111******1703"
-        var cardMatch = Regex.Match(text, @"\*{4,}(\d{4})");
-        if (cardMatch.Success)
-        {
-            if (int.TryParse(cardMatch.Groups[1].Value, out var lastFour))
-                receipt.LastFour = lastFour;
-        }
-        
+
         return receipt;
     }
     
@@ -64,16 +56,6 @@ public static class BankReceiptParserService
 
             if (double.TryParse(amountStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var amount))
                 receipt.Amount = amount;
-        }
-
-        //Пример: 4441111446266080 -> 6080
-        var cardMatch = Regex.Match(text, @"Рахунок платника\s+(\d{16})");
-        if (cardMatch.Success)
-        {
-            var cardNumber = cardMatch.Groups[1].Value;
-            var last4 = cardNumber.Substring(cardNumber.Length - 4);
-            if (int.TryParse(last4, out var lastFour))
-                receipt.LastFour = lastFour;
         }
 
         return receipt;
@@ -103,14 +85,6 @@ public static class BankReceiptParserService
                 receipt.Amount = amount;
         }
 
-        //Пример: 5168 **** **** 1170
-        var cardMatch = Regex.Match(text, @"Номер картки платника:\s*\d+\s*\*+\s*\*+\s*(\d{4})");
-        if (cardMatch.Success)
-        {
-            if (int.TryParse(cardMatch.Groups[1].Value, out var lastFour))
-                receipt.LastFour = lastFour;
-        }
-
         return receipt;
     }    
     
@@ -135,14 +109,6 @@ public static class BankReceiptParserService
 
             if (double.TryParse(amountStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var amount))
                 receipt.Amount = amount;
-        }
-        
-        // Пример: "4260 48** **** 3098"
-        var cardMatch = Regex.Match(text, @"\*{2,}\s*\*{2,}\s*(\d{4})");
-        if (cardMatch.Success)
-        {
-            if (int.TryParse(cardMatch.Groups[1].Value, out var lastFour))
-                receipt.LastFour = lastFour;
         }
 
         return receipt;
