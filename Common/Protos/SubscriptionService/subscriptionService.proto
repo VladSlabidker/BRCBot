@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "RpcSubscriptionService";
+
+package subscriptionService;
+
+service RpcSubscriptionService {
+  rpc IsActive (RpcSubscriptionStatusRequest) returns (RpcSubscriptionStatusResponse);
+  rpc GetEndDate (RpcSubscriptionEndDateRequest) returns (RpcSubscriptionEndDateResponse);
+}
+
+message RpcSubscriptionStatusRequest {
+  int64 userId = 1;
+}
+
+message RpcSubscriptionStatusResponse {
+  bool isActive = 1;
+}
+
+message RpcSubscriptionEndDateRequest {
+  int64 userId = 1;
+}
+
+message RpcSubscriptionEndDateResponse {
+  string endDate = 1;
+}
