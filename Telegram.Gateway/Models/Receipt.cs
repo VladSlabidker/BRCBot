@@ -1,4 +1,6 @@
-namespace Storefront.Models.OcrService;
+using Google.Protobuf.WellKnownTypes;
+
+namespace Telegram.Gateway.Models;
 
 public class Receipt
 {
@@ -12,7 +14,7 @@ public class Receipt
     
     public bool IsValid { get; set; }
     
-    public DateTime CheckedAt { get; set; }
+    public Timestamp CheckedAt { get; set; }
 
     public string Link { get; set; } = string.Empty;
 }

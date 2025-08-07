@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storefront", "Storefront\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidationService", "ValidationService\ValidationService.csproj", "{86AF0760-1710-4424-BC7F-F216A785D565}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionService", "SubscriptionService\SubscriptionService.csproj", "{2B001F4F-40A0-40B8-9B3A-68AED883C349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegram.Gateway", "Telegram.Gateway\Telegram.Gateway.csproj", "{8138AD45-207D-456F-ABF6-5AAF032E071F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +46,13 @@ Global
 		{86AF0760-1710-4424-BC7F-F216A785D565}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86AF0760-1710-4424-BC7F-F216A785D565}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86AF0760-1710-4424-BC7F-F216A785D565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B001F4F-40A0-40B8-9B3A-68AED883C349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B001F4F-40A0-40B8-9B3A-68AED883C349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B001F4F-40A0-40B8-9B3A-68AED883C349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B001F4F-40A0-40B8-9B3A-68AED883C349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8138AD45-207D-456F-ABF6-5AAF032E071F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8138AD45-207D-456F-ABF6-5AAF032E071F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8138AD45-207D-456F-ABF6-5AAF032E071F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8138AD45-207D-456F-ABF6-5AAF032E071F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
