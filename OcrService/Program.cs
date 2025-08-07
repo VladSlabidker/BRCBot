@@ -1,3 +1,4 @@
+using Common.Interceptors;
 using Microsoft.Extensions.Options;
 using OcrService.Configs;
 using OcrService.Profiles;
@@ -8,7 +9,10 @@ using Tesseract;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddGrpc();
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<ExceptionHandlingInterceptor>();
+});
 
 builder.Configuration.AddJsonFile("appsettings.Development.json");
 
