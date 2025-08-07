@@ -9,6 +9,8 @@ using SubscriptionService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsettings.Development.json");
+
 builder.Services.Configure<RabbitMqOptions>(
     builder.Configuration.GetSection("RabbitMQ"));
 builder.Services.Configure<BillingOptions>(
