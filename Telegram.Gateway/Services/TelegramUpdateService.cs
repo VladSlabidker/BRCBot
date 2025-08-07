@@ -1,5 +1,7 @@
 using System.Text.Json;
 using Common.Enums;
+using Common.Exceptions;
+using Grpc.Core;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -82,6 +84,8 @@ public class TelegramUpdateService : ITelegramUpdateService
                                     🏦 Банк: {Enum.GetName((BankType)result.BankId)}
                                     📅 Проверен: {checkedAt:dd.MM.yyyy HH:mm:ss}
                                     🔗 [Посмотреть в банке]({result.Link})
+                                     
+                                    По всем вопросам пишите @slabidker
                                     """;
 
                         await _botClient.SendMessage(
@@ -90,19 +94,24 @@ public class TelegramUpdateService : ITelegramUpdateService
                             parseMode: ParseMode.Markdown
                         );
                     }
-                    else
-                    {
-                        await _botClient.SendMessage(
-                            chatId,
-                            "❌ Чек НЕВАЛИДНЫЙ",
-                            parseMode: ParseMode.Markdown
-                        );  
-                    }
+                }
+                catch (InvalidReceiptException)
+                {
+                    await _botClient.SendMessage(
+                        chatId,
+                        "❌ Чек НЕВАЛИДНЫЙ",
+                        parseMode: ParseMode.Markdown
+                    );
+                }
+                catch(RpcException ex)
+                {
+                    _logger.LogError(ex, "Ошибка внутри сервиса");
+                    await _botClient.SendMessage(chatId, $"❌ Ошибка от сервиса: {ex.Status.Detail}. \nПо всем вопросам пишите: @slabidker");
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Ошибка при отправке чека");
-                    await _botClient.SendMessage(chatId, "Произошла ошибка при проверке чека.");
+                    await _botClient.SendMessage(chatId, "❌ Произошла ошибка при проверке чека. \nПо всем вопросам пишите: @slabidker");
                 }
                 finally
                 {
