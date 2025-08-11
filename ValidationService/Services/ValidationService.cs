@@ -10,18 +10,18 @@ namespace ValidationService.Services;
 
 public class ValidationService: IValidationService
 {
-    private readonly RpcOcrServiceClient _tesseractService;
+    private readonly RpcOcrServiceClient _orcService;
 
-    public ValidationService(RpcOcrServiceClient tesseractService)
+    public ValidationService(RpcOcrServiceClient orcService)
     {
-        _tesseractService = tesseractService;
+        _orcService = orcService;
     }
     
     public async Task<RpcReceipt> ValidateReceiptAsync(string base64String, CancellationToken cancellationToken)
     {
         RpcGetRecieptFromImageRequest request = new() { Base64String = base64String };
         
-        var ocrData = await _tesseractService.GetReceiptFromImageAsync(request, cancellationToken:  cancellationToken);
+        var ocrData = await _orcService.GetReceiptFromImageAsync(request, cancellationToken:  cancellationToken);
         
         RpcReceipt receipt = await FillReceiptDataAsync(ocrData);
         
