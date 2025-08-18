@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RpcOcrService;
+using static RpcOcrService.RpcOcrService;
 using Storefront.Models.OcrService;
 
 namespace Storefront.Controllers;
@@ -9,12 +10,12 @@ namespace Storefront.Controllers;
 [Route("api/ocr")]
 public class OcrContoller : ControllerBase
 {
-    private readonly RpcOcrService.RpcOcrService.RpcOcrServiceClient _tesseractService;
+    private readonly RpcOcrServiceClient _ocrServiceClient;
     private readonly IMapper _mapper;
     
-    public OcrContoller(RpcOcrService.RpcOcrService.RpcOcrServiceClient tesseractService, IMapper mapper)
+    public OcrContoller(RpcOcrServiceClient ocrServiceClient, IMapper mapper)
     {
-        _tesseractService = tesseractService;
+        _ocrServiceClient = ocrServiceClient;
         _mapper = mapper;
     }
 
@@ -24,7 +25,7 @@ public class OcrContoller : ControllerBase
         string base64string = Convert.ToBase64String(image);
 
         RpcGetRecieptFromImageRequest request = new() { Base64String = base64string };
-        RpcReceipt receipt = await _tesseractService.GetReceiptFromImageAsync(request, cancellationToken: cancellationToken);
+        RpcReceipt receipt = await _ocrServiceClient.GetReceiptFromImageAsync(request, cancellationToken: cancellationToken);
 
         Receipt result = _mapper.Map<Receipt>(receipt);
         

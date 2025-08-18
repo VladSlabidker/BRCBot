@@ -69,10 +69,17 @@ public static class BankReceiptParserService
         };
 
         //Ппример: Код*: DA21-AC1E-68EE-358D
-        var codeMatch = Regex.Match(text, @"Код\*:\s*([A-Z0-9\-]+)");
-        if (codeMatch.Success)
-            receipt.Code = codeMatch.Groups[1].Value;
+        var codeMatch = Regex.Match(
+            text,
+            @"\b([A-Z0-9]{4})[-\s]*([A-Z0-9]{4})[-\s]*([A-Z0-9]{4})[-\s]*([A-Z0-9]{4})\b",
+            RegexOptions.IgnoreCase
+        );
 
+        if (codeMatch.Success)
+        {
+            receipt.Code = $"{codeMatch.Groups[1].Value}-{codeMatch.Groups[2].Value}-{codeMatch.Groups[3].Value}-{codeMatch.Groups[4].Value}";
+        }
+        
         //Пример: Сума: 2 501.00
         var amountMatch = Regex.Match(text, @"Сума:\s*([\d\s]+[.,]\d{2})");
         if (amountMatch.Success)

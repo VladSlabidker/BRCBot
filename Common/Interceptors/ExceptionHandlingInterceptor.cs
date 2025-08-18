@@ -32,13 +32,13 @@ public class ExceptionHandlingInterceptor: Interceptor
         {
             _logger.LogWarning(ex, "Неправильный чек");
 
-            throw new RpcException(new Status(StatusCode.InvalidArgument, ex.Message));
+            throw new InvalidReceiptException(ex.Message);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Необработанная ошибка");
 
-            throw new RpcException(new Status(StatusCode.Internal, "Произошла внутренняя ошибка на сервере."));
+            throw new RpcException(new Status(StatusCode.Internal, ex.Message));
         }
     } 
 }

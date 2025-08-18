@@ -9,7 +9,7 @@ namespace OcrService.Services;
 
 public class TesseractService: IOcrService
 {
-    private static readonly Dictionary<string, BankType> _bankNameMap = new(StringComparer.OrdinalIgnoreCase)
+    private readonly Dictionary<string, BankType> _bankNameMap = new(StringComparer.OrdinalIgnoreCase)
     {
         { "приват", BankType.Privat24 },
         { "універсал", BankType.Mono },
@@ -58,7 +58,7 @@ public class TesseractService: IOcrService
             throw new InvalidDataException($"Wrong image with length: {text.Length}");
     }
 
-    private static string NormalizeBankName(string raw)
+    private string NormalizeBankName(string raw)
     {
         if (string.IsNullOrWhiteSpace(raw))
             return string.Empty;
