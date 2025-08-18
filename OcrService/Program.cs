@@ -19,7 +19,7 @@ builder.Configuration.AddJsonFile("appsettings.Development.json");
 builder.Services.Configure<OcrConfig>(builder.Configuration.GetSection(nameof(OcrConfig)));
 builder.Services.Configure<RabbitMqConfig>(builder.Configuration.GetSection(nameof(RabbitMqConfig)));
 
-builder.Services.AddMassTransitWithRabbitMq(builder.Configuration);
+builder.Services.AddRabbitMq(builder.Configuration);
 
 builder.Services.AddScoped<TesseractEngine>(provider =>
 {
@@ -28,7 +28,7 @@ builder.Services.AddScoped<TesseractEngine>(provider =>
 });
 
 builder.Services.AddScoped<TesseractService>();
-builder.Services.AddScoped<PaddleService>();
+builder.Services.AddTransient<PaddleService>();
 builder.Services.AddAutoMapper(typeof(OcrProfile));
 
 var app = builder.Build();

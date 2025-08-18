@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic_settings  import BaseSettings
 
 class Settings(BaseSettings):
     rabbitmq_host: str = "localhost"
@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     rabbitmq_user: str = "guest"
     rabbitmq_pass: str = "guest"
     request_queue: str = "ocr_requests"
+    response_queue: str = "ocr_response"
 
     class Config:
         env_file = ".env"

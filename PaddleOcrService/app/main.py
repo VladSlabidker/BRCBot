@@ -13,7 +13,7 @@ app = FastAPI()
 # DI factories
 def get_ocr_service() -> OCRService:
     # Здесь можно переключить параметры OCR (язык, предобученные модели и т.д.)
-    return OCRService(lang='en')
+    return OCRService()
 
 def get_broker(settings: Settings = Depends(get_settings)) -> BrokerInterface:
     return RabbitMQBroker(settings)

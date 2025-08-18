@@ -1,7 +1,8 @@
+using System.Text.RegularExpressions;
 using Common.Enums;
-using MassTransit;
+using Microsoft.Extensions.Options;
+using OcrService.Configs;
 using OcrService.Interfaces;
-using OcrService.Models;
 using OcrService.Models;
 using static OcrService.Services.BankReceiptParserService;
 
@@ -9,11 +10,13 @@ namespace OcrService.Services;
 
 public class PaddleService : IOcrService
 {
-    private readonly IRequestClient<OcrRequest> _client;
+    private readonly IRabbitMqClient _client;
+    private readonly RabbitMqConfig _rabbitMqConfig;
 
-    public PaddleService(IRequestClient<OcrRequest> client)
+    public PaddleService(IRabbitMqClient client, IOptions<RabbitMqConfig> options)
     {
         _client = client;
+        _rabbitMqConfig = options.Value;
     }
 
     public async Task<Receipt> GetReceiptFromImageAsync(string base64, CancellationToken cancellationToken)
@@ -22,22 +25,29 @@ public class PaddleService : IOcrService
             return await Task.FromCanceled<Receipt>(cancellationToken);
 
         // Убираем префикс, если есть
-        if (base64.Contains(",")) 
+        if (base64.Contains(","))
             base64 = base64.Split(',')[1];
 
-        // Отправляем запрос в Python через RabbitMQ
-        var response = await _client.GetResponse<OcrResponse>(new OcrRequest
+        // Создаём запрос
+        var request = new OcrRequest
         {
             ImageBase64 = base64
-        }, cancellationToken);
+            // CorrelationId будет создан внутри RabbitMqClient
+        };
 
-        string text = response.Message.Text;
+        // Отправляем и ждём ответа
+        var response = await _client.SendRequestAndWaitForResponseAsync(request, cancellationToken);
 
-        // Логика определения банка (та же, что в TesseractService)
+        string text = response.Text;
+        
+        if(string.IsNullOrWhiteSpace(text))
+            throw new InvalidDataException($"Failed to preproccess the image: {response.Error}");
+        
+        // Логика определения банка (как в TesseractService)
         const string pattern = @"\b(?:Приватбанк|Універсал\s*банк|Банк\s*Власний\s*Рахунок|Банк\s*Восток|Восток\s*Банк|МТБ\s*Банк|MTB\s*Bank|monobank|Universal\s*Bank|privatbank)\b";
-        var bankName = System.Text.RegularExpressions.Regex.Match(text, pattern, 
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase | 
-            System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+        var bankName = Regex.Match(text, pattern,
+            RegexOptions.IgnoreCase |
+            RegexOptions.CultureInvariant);
 
         if (bankName.Success)
         {
@@ -45,13 +55,10 @@ public class PaddleService : IOcrService
 
             if (_bankNameMap.TryGetValue(name, out var bankType))
                 return ParseReceiptFromText(bankType, text);
-            else
-                throw new InvalidDataException($"{name} is not a valid bank name");
+            
+            throw new InvalidDataException($"{name} is not a valid bank name");
         }
-        else
-        {
-            throw new InvalidDataException($"Wrong image with length: {text.Length}");
-        }
+        throw new InvalidDataException($"Wrong image with length: {text.Length}");
     }
 
     private readonly Dictionary<string, BankType> _bankNameMap = new(StringComparer.OrdinalIgnoreCase)
@@ -73,10 +80,10 @@ public class PaddleService : IOcrService
             return string.Empty;
 
         raw = raw.ToLowerInvariant();
-        raw = System.Text.RegularExpressions.Regex.Replace(raw, @"\s+", " ").Trim();
-        raw = System.Text.RegularExpressions.Regex.Replace(raw, @"\bmonobank\b", "mono банк", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        raw = System.Text.RegularExpressions.Regex.Replace(raw, @"(приват|універсал|власний рахунок|восток|мтб|mtb|mono)(банк)", "$1 банк", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        raw = System.Text.RegularExpressions.Regex.Replace(raw, @"(банк)(приват|універсал|власний рахунок|восток|мтб|mtb|mono)", "$2 банк", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        raw = Regex.Replace(raw, @"\s+", " ").Trim();
+        raw = Regex.Replace(raw, @"\bmonobank\b", "mono банк", RegexOptions.IgnoreCase);
+        raw = Regex.Replace(raw, @"(приват|універсал|власний рахунок|восток|мтб|mtb|mono)(банк)", "$1 банк", RegexOptions.IgnoreCase);
+        raw = Regex.Replace(raw, @"(банк)(приват|універсал|власний рахунок|восток|мтб|mtb|mono)", "$2 банк", RegexOptions.IgnoreCase);
 
         if (raw.StartsWith("банк "))
             raw = raw.Substring(5) + " банк";
