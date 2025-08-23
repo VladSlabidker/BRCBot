@@ -29,30 +29,23 @@ jobs:
 
             # Генерируем .env из GitHub Secrets
             cat > .env <<EOL
-            SA_PASSWORD=${{ secrets.SA_PASSWORD }}
-            RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}
-            RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }}
-            TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
-            DOMAIN=${{ secrets.DOMAIN }}
-            REDIS_HOST=redis
-            REDIS_PORT=6379
-            RABBITMQ_HOST=rabbitmq
-            RABBITMQ_PORT=5672
-            DB_CONNECTION_STRING=Server=sqlserver,1433;User Id=sa;Password=${{ secrets.SA_PASSWORD }};TrustServerCertificate=true;Encrypt=false;
-            EOL
+SA_PASSWORD=${{ secrets.SA_PASSWORD }}
+RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}
+RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }}
+TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
+DOMAIN=${{ secrets.DOMAIN }}
+REDIS_HOST=redis
+REDIS_PORT=6379
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=5672
+DB_CONNECTION_STRING=Server=sqlserver,1433;User Id=sa;Password=${{ secrets.SA_PASSWORD }};TrustServerCertificate=true;Encrypt=false;
+EOL
 
-            # Пересобираем контейнеры с .env
+            # Собираем и запускаем контейнеры с .env
             docker compose pull || true
             docker compose up -d --build
 
             # Чистим старые образы
-            docker image prune -f
-
-            # Обновляем и пересобираем контейнеры
-            docker compose pull || true
-            docker compose up -d --build
-
-            # Чистим старые неиспользуемые образы
             docker image prune -f
 
       # 3. Автоматическая установка Telegram Webhook после деплоя
