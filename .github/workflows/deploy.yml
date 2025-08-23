@@ -25,16 +25,17 @@ jobs:
             git pull origin main
 
             # Генерируем .env построчно через echo
-            echo "SA_PASSWORD=${{ secrets.SA_PASSWORD }}" > .env
-            echo "RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}" >> .env
-            echo "RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }}" >> .env
-            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
-            echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
+            echo "SA_PASSWORD=\"${{ secrets.SA_PASSWORD }}\"" > .env
+            echo "RABBITMQ_USER=\"${{ secrets.RABBITMQ_USER }}\"" >> .env
+            echo "RABBITMQ_PASS=\"${{ secrets.RABBITMQ_PASS }}\"" >> .env
+            echo "TELEGRAM_TOKEN=\"${{ secrets.TELEGRAM_TOKEN }}\"" >> .env
+            echo "DOMAIN=\"${{ secrets.DOMAIN }}\"" >> .env
             echo "REDIS_HOST=redis" >> .env
             echo "REDIS_PORT=6379" >> .env
             echo "RABBITMQ_HOST=rabbitmq" >> .env
             echo "RABBITMQ_PORT=5672" >> .env
-            echo "DB_CONNECTION_STRING=Server=sqlserver,1433;User Id=sa;Password=${{ secrets.SA_PASSWORD }};TrustServerCertificate=true;Encrypt=false;" >> .env
+            echo "DB_CONNECTION_STRING=\"Server=sqlserver,1433;User Id=sa;Password=${{ secrets.SA_PASSWORD }};TrustServerCertificate=true;Encrypt=false;\"" >> .env
+
 
             docker compose pull || true
             docker compose up -d --build
