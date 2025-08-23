@@ -1,0 +1,46 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (for metadata only)
+        uses: actions/checkout@v4
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          fingerprint: ${{ secrets.VPS_SSH_FINGERPRINT }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd ~/mybot
+            # если репо впервые — сделать git clone вручную до первого деплоя
+            git fetch --all --prune
+            git checkout main
+            git pull --ff-only
+
+            # убедимся, что docker compose есть (plugin)
+            if ! docker compose version >/dev/null 2>&1; then
+              echo "docker compose not found"; exit 1
+            fi
+
+            # подтянуть новые образы (если используешь registry)
+            docker compose pull || true
+
+            # пересобрать локально, если build из репозитория
+            docker compose build --pull
+
+            # применить
+            docker compose up -d
+
+            # немного уборки
+            docker image prune -f
