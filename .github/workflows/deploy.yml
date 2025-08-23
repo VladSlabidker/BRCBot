@@ -22,7 +22,7 @@ jobs:
             cd ~/mybot
 
             git reset --hard
-            git pull origin main
+            git pull origin master
 
             # Генерируем .env построчно через echo
             echo "SA_PASSWORD=\"${{ secrets.SA_PASSWORD }}\"" > .env
