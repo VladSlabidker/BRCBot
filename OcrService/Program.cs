@@ -14,7 +14,10 @@ builder.Services.AddGrpc(options =>
     options.Interceptors.Add<ExceptionHandlingInterceptor>();
 });
 
+# if DEBUG
 builder.Configuration.AddJsonFile("appsettings.Development.json");
+# endif
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.Configure<OcrConfig>(builder.Configuration.GetSection(nameof(OcrConfig)));
 builder.Services.Configure<RabbitMqConfig>(builder.Configuration.GetSection(nameof(RabbitMqConfig)));

@@ -2,7 +2,10 @@ using Data.Cache.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+# if DEBUG
 builder.Configuration.AddJsonFile("appsettings.Development.json");
+# endif
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddRedisCache(builder.Configuration);
 

@@ -3,7 +3,11 @@ using Data.SQL.Configs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+# if DEBUG
 builder.Configuration.AddJsonFile("appsettings.Development.json");
+# endif
+builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddJsonFile("appsettings.json");
 
 builder.Services.AddGrpc();
 builder.Services.AddDbContext<BotContext>();

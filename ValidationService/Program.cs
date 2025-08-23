@@ -2,16 +2,15 @@ using Data.Cache.Extensions;
 using Data.SQL;
 using Data.SQL.Configs;
 using ValidationService.Configs;
-using ValidationService.Services;
-using Common.Enums;
 using Common.Interceptors;
-
-var res = await CheckGovService.ValidateReceiptAsync(BankType.Mono, "H4ХЕ-8РХМ-ВВТР-481А");
-Console.WriteLine(res);
 
 var builder = WebApplication.CreateBuilder(args);
 
+# if DEBUG
 builder.Configuration.AddJsonFile("appsettings.Development.json");
+# endif
+builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddJsonFile("appsettings.json");
 UriConfig configurationUri = new UriConfig();
 builder.Configuration.GetSection(nameof(UriConfig)).Bind(configurationUri);
 

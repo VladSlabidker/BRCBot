@@ -10,7 +10,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 
+# if DEBUG
 builder.Configuration.AddJsonFile("appsettings.Development.json");
+# endif
+builder.Configuration.AddEnvironmentVariables();
 
 UriConfig configurationUri = new UriConfig();
 builder.Configuration.GetSection(nameof(UriConfig)).Bind(configurationUri);
