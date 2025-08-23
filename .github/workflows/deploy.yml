@@ -8,9 +8,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      # 1. Клонируем код проекта
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Деплой на VPS по SSH
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -19,26 +21,35 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script_stop: true
           script: |
+            # Переходим в директорию проекта
             cd ~/mybot
 
-            export DOMAIN="${{ secrets.DOMAIN }}"
+            # Подтягиваем последние изменения из репозитория
+            git reset --hard
+            git pull origin main
+
+            # Экспортируем переменные окружения для контейнеров
             export SA_PASSWORD="${{ secrets.SA_PASSWORD }}"
             export RABBITMQ_USER="${{ secrets.RABBITMQ_USER }}"
             export RABBITMQ_PASS="${{ secrets.RABBITMQ_PASS }}"
             export TELEGRAM_TOKEN="${{ secrets.TELEGRAM_TOKEN }}"
-            export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
+            export DOMAIN="${{ secrets.DOMAIN }}"
+            export REDIS_HOST="redis"
+            export REDIS_PORT="6379"
+            export RABBITMQ_HOST="rabbitmq"
+            export RABBITMQ_PORT="5672"
+            export DB_CONNECTION_STRING="Server=sqlserver,1433;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;Encrypt=false;"
 
+            # Обновляем и пересобираем контейнеры
             docker compose pull || true
             docker compose up -d --build
+
+            # Чистим старые неиспользуемые образы
             docker image prune -f
 
-            # Генерируем SSL сертификаты, если их еще нет
-            docker compose run --rm certbot certonly \
-              --webroot \
-              --webroot-path=/var/www/certbot \
-              --email youremail@example.com \
-              --agree-tos \
-              --no-eff-email \
-              -d $DOMAIN
-
-            docker compose restart nginx
+      # 3. Автоматическая установка Telegram Webhook после деплоя
+      - name: Set Telegram Webhook
+        run: |
+          curl -X POST \
+            "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/setWebhook" \
+            -d "url=https://${{ secrets.DOMAIN }}/api/webhook"
