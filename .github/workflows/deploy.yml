@@ -8,11 +8,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. Клонируем код проекта
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Деплой на VPS по SSH
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -23,32 +21,25 @@ jobs:
           script: |
             cd ~/mybot
 
-            # Подтягиваем последние изменения
             git reset --hard
             git pull origin main
 
-            # Генерируем .env из GitHub Secrets
-            cat > .env <<EOL
-SA_PASSWORD=${{ secrets.SA_PASSWORD }}
-RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}
-RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }}
-TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
-DOMAIN=${{ secrets.DOMAIN }}
-REDIS_HOST=redis
-REDIS_PORT=6379
-RABBITMQ_HOST=rabbitmq
-RABBITMQ_PORT=5672
-DB_CONNECTION_STRING=Server=sqlserver,1433;User Id=sa;Password=${{ secrets.SA_PASSWORD }};TrustServerCertificate=true;Encrypt=false;
-EOL
+            # Генерируем .env построчно через echo
+            echo "SA_PASSWORD=${{ secrets.SA_PASSWORD }}" > .env
+            echo "RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}" >> .env
+            echo "RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }}" >> .env
+            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .env
+            echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
+            echo "REDIS_HOST=redis" >> .env
+            echo "REDIS_PORT=6379" >> .env
+            echo "RABBITMQ_HOST=rabbitmq" >> .env
+            echo "RABBITMQ_PORT=5672" >> .env
+            echo "DB_CONNECTION_STRING=Server=sqlserver,1433;User Id=sa;Password=${{ secrets.SA_PASSWORD }};TrustServerCertificate=true;Encrypt=false;" >> .env
 
-            # Собираем и запускаем контейнеры с .env
             docker compose pull || true
             docker compose up -d --build
-
-            # Чистим старые образы
             docker image prune -f
 
-      # 3. Автоматическая установка Telegram Webhook после деплоя
       - name: Set Telegram Webhook
         run: |
           curl -X POST \
