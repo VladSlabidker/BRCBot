@@ -7,18 +7,18 @@ WORKDIR /src
 COPY . .
 
 ARG PROJECT_NAME
-RUN dotnet restore "$PROJECT_NAME/$PROJECT_NAME.csproj"
+RUN dotnet restore "Telegram.Gateway/Telegram.Gateway.csproj"
 
 WORKDIR "/src/${PROJECT_NAME}"
-RUN dotnet build "${PROJECT_NAME}.csproj" -c Release -o /app/build
+RUN dotnet build "Telegram.Gateway.csproj" -c Release -o /app/build
 
 FROM build AS publish
 ARG PROJECT_NAME
-RUN dotnet publish "${PROJECT_NAME}.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Telegram.Gateway.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 ARG PROJECT_NAME
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "${PROJECT_NAME}.dll"]
+ENTRYPOINT ["dotnet", "Telegram.Gateway.dll"]
 
