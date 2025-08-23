@@ -35,4 +35,10 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="appsettings.OcrService.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    
 </Project>
