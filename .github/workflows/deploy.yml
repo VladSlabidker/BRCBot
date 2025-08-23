@@ -20,8 +20,8 @@ jobs:
           script_stop: true
           script: |
             cd ~/mybot
-
-            git reset --hard
+            git fetch origin master
+            git reset --hard origin/master
             git pull origin master
 
             # Генерируем .env построчно через echo
