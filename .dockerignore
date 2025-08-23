@@ -1,0 +1,41 @@
+﻿# Git
+**/.git
+**/.gitignore
+
+# IDE / editors
+**/.idea
+**/.vs
+**/.vscode
+**/.settings
+**/.project
+**/*.user
+**/*.suo
+
+# Build output
+**/bin
+**/obj
+
+# Python virtual env
+.venv
+venv
+env
+
+# Docker/compose
+**/docker-compose*
+# Dockerfile оставляем, чтобы не мешать build context
+
+# Configs / secrets (локальные)
+**/.env
+**/secrets.dev.yaml
+**/values.dev.yaml
+**/azds.yaml
+
+# Misc
+**/*.dbmdl
+**/*.jfm
+**/*.toolstarget
+**/charts
+
+# Docs
+LICENSE
+README.md
