@@ -4,10 +4,10 @@ using Telegram.Gateway.Services;
 
 var builder = WebApplication.CreateBuilder(args);
     # if DEBUG
-builder.Configuration.AddJsonFile("appsettings.Development.json");
+builder.Configuration.AddJsonFile("appsettings.Development.Telegram.Gateway.json");
     # endif
 builder.Configuration.AddEnvironmentVariables();
-
+builder.Configuration.AddJsonFile("appsettings.Telegram.Gateway.json");
 string token = builder.Configuration["Telegram:BotToken"] 
                ?? throw new InvalidOperationException("Telegram token not configured");
 

@@ -32,13 +32,6 @@
         <Protobuf Include="..\Common\Protos\OcrService\ocrService.proto" GrpcServices="Client" Link="Protos\OcrService\ocrService.proto" AdditionalImportDirs="..\Common\Protos"/>
         <Protobuf Include="..\Common\Protos\ValidationService\validationService.proto" GrpcServices="Client" Link="Protos\ValidationService\validationService.proto" AdditionalImportDirs="..\Common\Protos"/>
     </ItemGroup>
-    
-    <ItemGroup>
-        <None Update="..\OcrService\appsettings.json" CopyToOutputDirectory="Never" />
-        <None Update="..\OcrService\appsettings.Development.json" CopyToOutputDirectory="Never" />
-        <None Update="..\ValidationService\appsettings.json" CopyToOutputDirectory="Never" />
-        <None Update="..\ValidationService\appsettings.Development.json" CopyToOutputDirectory="Never" />
-    </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\.dockerignore">

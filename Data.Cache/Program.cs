@@ -3,10 +3,10 @@ using Data.Cache.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 # if DEBUG
-builder.Configuration.AddJsonFile("appsettings.Development.json");
+builder.Configuration.AddJsonFile("appsettings.Development.Data.Cache.json");
 # endif
 builder.Configuration.AddEnvironmentVariables();
-
+builder.Configuration.AddJsonFile("appsettings.Data.Cache.json");
 builder.Services.AddRedisCache(builder.Configuration);
 
 builder.Services.AddGrpc();

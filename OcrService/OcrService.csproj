@@ -28,7 +28,7 @@
     <ItemGroup>
         <Protobuf Include="..\Common\Protos\OcrService\ocrService.proto" GrpcServices="Server" Link="Protos\OcrService\ocrService.proto" />
     </ItemGroup>
-    
+
     <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>

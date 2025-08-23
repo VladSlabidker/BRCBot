@@ -15,10 +15,10 @@ builder.Services.AddGrpc(options =>
 });
 
 # if DEBUG
-builder.Configuration.AddJsonFile("appsettings.Development.json");
+builder.Configuration.AddJsonFile("appsettings.Development.OcrService.json");
 # endif
 builder.Configuration.AddEnvironmentVariables();
-
+builder.Configuration.AddJsonFile("appsettings.OcrService.json");
 builder.Services.Configure<OcrConfig>(builder.Configuration.GetSection(nameof(OcrConfig)));
 builder.Services.Configure<RabbitMqConfig>(builder.Configuration.GetSection(nameof(RabbitMqConfig)));
 
