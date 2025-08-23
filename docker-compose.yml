@@ -51,7 +51,7 @@ services:
   # ==========================
   validationservice:
     build:
-      context: ./ValidationService
+      context: .
       dockerfile: Dockerfile
     container_name: validationservice
     restart: always
@@ -74,7 +74,7 @@ services:
   # ==========================
   telegramgateway:
     build:
-      context: ./Telegram.Gateway
+      context: .
       dockerfile: Dockerfile
     container_name: telegramgateway
     restart: always
@@ -90,7 +90,7 @@ services:
   # ==========================
   storefront:
     build:
-      context: ./Storefront
+      context: .
       dockerfile: Dockerfile
     container_name: storefront
     restart: always
@@ -109,7 +109,7 @@ services:
   # ==========================
   ocrservice:
     build:
-      context: ./OcrService
+      context: .
       dockerfile: Dockerfile
     container_name: ocrservice
     restart: always
@@ -131,7 +131,7 @@ services:
   # ==========================
   data_sql:
     build:
-      context: ./Data.SQL
+      context: .
       dockerfile: Dockerfile
     container_name: data_sql
     restart: always
@@ -152,7 +152,7 @@ services:
   # ==========================
   data_cache:
     build:
-      context: ./Data.Cache
+      context: .
       dockerfile: Dockerfile
     container_name: data_cache
     restart: always
@@ -171,7 +171,7 @@ services:
   # ==========================
   paddleocrservice:
     build:
-      context: ./PaddleOcrService
+      context: .
       dockerfile: Dockerfile
     container_name: paddleocrservice
     restart: always
