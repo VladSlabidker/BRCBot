@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Development.Data.SQL.json");
 # endif
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddJsonFile("appsettings.Data.SQL.json");
+builder.Configuration.AddJsonFile("/app/appsettings.Data.SQL.json");
 
 builder.Services.AddGrpc();
 builder.Services.AddDbContext<BotContext>();

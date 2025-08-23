@@ -38,13 +38,6 @@
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="appsettings.Storefront.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-    
     <PropertyGroup>
         <PlaywrightBrowsersPath>0</PlaywrightBrowsersPath>
     </PropertyGroup>

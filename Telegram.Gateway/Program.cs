@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Development.Telegram.Gateway.json");
     # endif
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddJsonFile("appsettings.Telegram.Gateway.json");
+builder.Configuration.AddJsonFile("/app/appsettings.Telegram.Gateway.json");
 string token = builder.Configuration["Telegram:BotToken"] 
                ?? throw new InvalidOperationException("Telegram token not configured");
 

@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Development.Data.Cache.json");
 # endif
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddJsonFile("appsettings.Data.Cache.json");
+builder.Configuration.AddJsonFile("/app/appsettings.Data.Cache.json");
 builder.Services.AddRedisCache(builder.Configuration);
 
 builder.Services.AddGrpc();
