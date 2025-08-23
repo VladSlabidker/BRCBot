@@ -1,3 +1,4 @@
+using Common.Interceptors;
 using Storefront.Configs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,12 @@ builder.Configuration.AddJsonFile("appsettings.Development.json");
 
 UriConfig configurationUri = new UriConfig();
 builder.Configuration.GetSection(nameof(UriConfig)).Bind(configurationUri);
+
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<ExceptionHandlingInterceptor>();
+});
+
 builder.Services.AddGrpcClient<RpcOcrService.RpcOcrService.RpcOcrServiceClient>(opt => opt.Address = configurationUri.OcrService).ConfigurePrimaryHttpMessageHandler(() =>
 {
     return new HttpClientHandler

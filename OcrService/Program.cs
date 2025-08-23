@@ -1,18 +1,25 @@
+using Common.Interceptors;
 using Microsoft.Extensions.Options;
 using OcrService.Configs;
+using OcrService.Extensions;
 using OcrService.Profiles;
 using OcrService.Services;
-using OcrService.Services.gRPC;
 using Tesseract;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddGrpc();
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<ExceptionHandlingInterceptor>();
+});
 
 builder.Configuration.AddJsonFile("appsettings.Development.json");
 
 builder.Services.Configure<OcrConfig>(builder.Configuration.GetSection(nameof(OcrConfig)));
+builder.Services.Configure<RabbitMqConfig>(builder.Configuration.GetSection(nameof(RabbitMqConfig)));
+
+builder.Services.AddRabbitMq(builder.Configuration);
 
 builder.Services.AddScoped<TesseractEngine>(provider =>
 {
@@ -21,12 +28,12 @@ builder.Services.AddScoped<TesseractEngine>(provider =>
 });
 
 builder.Services.AddScoped<TesseractService>();
-builder.Services.AddGrpc();
+builder.Services.AddTransient<PaddleService>();
 builder.Services.AddAutoMapper(typeof(OcrProfile));
 
 var app = builder.Build();
 
-app.MapGrpcService<RpcTesseractService>();
+app.MapGrpcService<OcrService.Services.gRPC.RpcOcrService>();
 
 app.MapGet("/",
     () =>

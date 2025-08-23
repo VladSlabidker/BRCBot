@@ -1,5 +1,7 @@
 using System.Text.Json;
 using Common.Enums;
+using Common.Exceptions;
+using Grpc.Core;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -38,10 +40,37 @@ public class TelegramUpdateService : ITelegramUpdateService
             // Команда /start
             if (msg.Text == "/start")
             {
+                var keyboard = new ReplyKeyboardMarkup(new[]
+                {
+                    new KeyboardButton[] { "🧾 Проверить чек" },
+                    new KeyboardButton[] { "⚠️ Сообщить об ошибке" }
+                })
+                {
+                    ResizeKeyboard = true
+                };
+
                 await _botClient.SendMessage(chatId,
                     "Привет!",
-                    replyMarkup: new InlineKeyboardMarkup(
-                        InlineKeyboardButton.WithCallbackData("Проверить чек", "check_receipt")));
+                    replyMarkup: keyboard);
+                return;
+            }
+
+            // Кнопка "Проверить чек"
+            if (msg.Text == "🧾 Проверить чек")
+            {
+                _waitingForReceipt[chatId] = true;
+
+                await _botClient.SendMessage(chatId,
+                    "Теперь пришли, пожалуйста, фото чека.");
+                return;
+            }
+
+            // Кнопка "Сообщить об ошибке"
+            if (msg.Text == "⚠️ Сообщить об ошибке")
+            {
+                await _botClient.SendMessage(chatId,
+                    "Напиши, пожалуйста, сюда \n👉 @slabidker",
+                    parseMode: ParseMode.Markdown);
                 return;
             }
 
@@ -82,6 +111,8 @@ public class TelegramUpdateService : ITelegramUpdateService
                                     🏦 Банк: {Enum.GetName((BankType)result.BankId)}
                                     📅 Проверен: {checkedAt:dd.MM.yyyy HH:mm:ss}
                                     🔗 [Посмотреть в банке]({result.Link})
+                                     
+                                    По всем вопросам пишите @slabidker
                                     """;
 
                         await _botClient.SendMessage(
@@ -90,19 +121,26 @@ public class TelegramUpdateService : ITelegramUpdateService
                             parseMode: ParseMode.Markdown
                         );
                     }
-                    else
-                    {
-                        await _botClient.SendMessage(
-                            chatId,
-                            "❌ Чек НЕВАЛИДНЫЙ",
-                            parseMode: ParseMode.Markdown
-                        );  
-                    }
+                }
+                catch (InvalidReceiptException)
+                {
+                    await _botClient.SendMessage(
+                        chatId,
+                        "❌ Чек НЕВАЛИДНЫЙ",
+                        parseMode: ParseMode.Markdown
+                    );
+                }
+                catch (RpcException ex)
+                {
+                    _logger.LogError(ex, "Ошибка внутри сервиса");
+                    await _botClient.SendMessage(chatId,
+                        $"❌ Ошибка от сервиса: {ex.Status.Detail}. \nПо всем вопросам пишите: @slabidker");
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Ошибка при отправке чека");
-                    await _botClient.SendMessage(chatId, "Произошла ошибка при проверке чека.");
+                    await _botClient.SendMessage(chatId,
+                        "❌ Произошла ошибка при проверке чека. \nПо всем вопросам пишите: @slabidker");
                 }
                 finally
                 {
@@ -113,20 +151,7 @@ public class TelegramUpdateService : ITelegramUpdateService
             }
 
             // Прочие сообщения
-            await _botClient.SendMessage(chatId, "Я понимаю только команду /start или фото после кнопки.");
-        }
-        else if (update.Type == UpdateType.CallbackQuery)
-        {
-            var callback = update.CallbackQuery!;
-            var chatId = callback.Message!.Chat.Id;
-
-            if (callback.Data == "check_receipt")
-            {
-                _waitingForReceipt[chatId] = true;
-
-                await _botClient.SendMessage(chatId,
-                    "Теперь пришли, пожалуйста, фото чека.");
-            }
+            await _botClient.SendMessage(chatId, "Неправильная команда, введите пожалуйста /start и следуйте инструкциям");
         }
     }
 }
