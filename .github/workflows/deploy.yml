@@ -21,15 +21,24 @@ jobs:
           script: |
             cd ~/mybot
 
-            # Экспорт всех секретов
+            export DOMAIN="${{ secrets.DOMAIN }}"
             export SA_PASSWORD="${{ secrets.SA_PASSWORD }}"
             export RABBITMQ_USER="${{ secrets.RABBITMQ_USER }}"
             export RABBITMQ_PASS="${{ secrets.RABBITMQ_PASS }}"
             export TELEGRAM_TOKEN="${{ secrets.TELEGRAM_TOKEN }}"
             export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
-            export DB_CONNECTION_STRING="Server=sqlserver,1433;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;Encrypt=false;"
 
-            # Обновляем и запускаем контейнеры
             docker compose pull || true
             docker compose up -d --build
             docker image prune -f
+
+            # Генерируем SSL сертификаты, если их еще нет
+            docker compose run --rm certbot certonly \
+              --webroot \
+              --webroot-path=/var/www/certbot \
+              --email youremail@example.com \
+              --agree-tos \
+              --no-eff-email \
+              -d $DOMAIN
+
+            docker compose restart nginx
