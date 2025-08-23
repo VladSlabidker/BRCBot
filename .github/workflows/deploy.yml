@@ -2,13 +2,13 @@ name: Deploy to VPS
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (for metadata only)
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Deploy over SSH
@@ -17,30 +17,19 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_PORT || 22 }}
-          fingerprint: ${{ secrets.VPS_SSH_FINGERPRINT }}
           script_stop: true
           script: |
-            set -euo pipefail
             cd ~/mybot
-            # если репо впервые — сделать git clone вручную до первого деплоя
-            git fetch --all --prune
-            git checkout main
-            git pull --ff-only
 
-            # убедимся, что docker compose есть (plugin)
-            if ! docker compose version >/dev/null 2>&1; then
-              echo "docker compose not found"; exit 1
-            fi
+            # Экспорт всех секретов
+            export SA_PASSWORD="${{ secrets.SA_PASSWORD }}"
+            export RABBITMQ_USER="${{ secrets.RABBITMQ_USER }}"
+            export RABBITMQ_PASS="${{ secrets.RABBITMQ_PASS }}"
+            export TELEGRAM_TOKEN="${{ secrets.TELEGRAM_TOKEN }}"
+            export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
+            export DB_CONNECTION_STRING="Server=sqlserver,1433;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;Encrypt=false;"
 
-            # подтянуть новые образы (если используешь registry)
+            # Обновляем и запускаем контейнеры
             docker compose pull || true
-
-            # пересобрать локально, если build из репозитория
-            docker compose build --pull
-
-            # применить
-            docker compose up -d
-
-            # немного уборки
+            docker compose up -d --build
             docker image prune -f
