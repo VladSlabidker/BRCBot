@@ -28,6 +28,13 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="..\Data.Cache\appsettings.json" CopyToOutputDirectory="Never" />
+        <None Update="..\Data.Cache\appsettings.Development.json" CopyToOutputDirectory="Never" />
+        <None Update="..\Data.SQL\appsettings.json" CopyToOutputDirectory="Never" />
+        <None Update="..\Data.SQL\appsettings.Development.json" CopyToOutputDirectory="Never" />
+    </ItemGroup>
+    
+    <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>

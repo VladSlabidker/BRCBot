@@ -31,7 +31,16 @@
       <ProjectReference Include="..\Data.Cache\Data.Cache.csproj" />
       <ProjectReference Include="..\Data.SQL\Data.SQL.csproj" />
       <ProjectReference Include="..\OcrService\OcrService.csproj" />
-    </ItemGroup>    
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Update="..\Data.Cache\appsettings.json" CopyToOutputDirectory="Never" />
+        <None Update="..\Data.Cache\appsettings.Development.json" CopyToOutputDirectory="Never" />
+        <None Update="..\OcrService\appsettings.json" CopyToOutputDirectory="Never" />
+        <None Update="..\OcrService\appsettings.Development.json" CopyToOutputDirectory="Never" />
+        <None Update="..\Data.SQL\appsettings.json" CopyToOutputDirectory="Never" />
+        <None Update="..\Data.SQL\appsettings.Development.json" CopyToOutputDirectory="Never" />
+    </ItemGroup>
     
     <ItemGroup>
       <Content Include="..\.dockerignore">
