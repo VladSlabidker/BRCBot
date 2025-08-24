@@ -15,9 +15,7 @@ RUN dotnet add package Microsoft.Playwright
 
 RUN dotnet build "ValidationService.csproj" -c Release -o /app/build
 
-RUN apt-get update && apt-get install -y powershell
-
-RUN pwsh /app/build/playwright.ps1 install --with-deps
+RUN /bin/bash /app/build/playwright.sh install --with-deps
 
 FROM build AS publish
 ARG PROJECT_NAME
