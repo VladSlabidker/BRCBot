@@ -3,6 +3,7 @@ using Data.SQL;
 using Data.SQL.Configs;
 using ValidationService.Configs;
 using Common.Interceptors;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,13 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<BotContext>();
 builder.Services.Configure<SqlExpressConfig>(builder.Configuration.GetSection(nameof(SqlExpressConfig)));
 builder.Services.AddRedisCache(builder.Configuration);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
 builder.Services.AddGrpcClient<RpcOcrService.RpcOcrService.RpcOcrServiceClient>(opt => opt.Address = configurationUri.OcrService).ConfigurePrimaryHttpMessageHandler(() =>
 {
     return new HttpClientHandler

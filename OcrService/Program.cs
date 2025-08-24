@@ -1,4 +1,5 @@
 using Common.Interceptors;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Options;
 using OcrService.Configs;
 using OcrService.Extensions;
@@ -28,7 +29,13 @@ builder.Services.AddScoped<TesseractEngine>(provider =>
     var config = provider.GetRequiredService<IOptions<OcrConfig>>().Value;
     return new TesseractEngine(config.TessDataPath, config.Languages, EngineMode.Default);
 });
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
 builder.Services.AddScoped<TesseractService>();
 builder.Services.AddTransient<PaddleService>();
 builder.Services.AddAutoMapper(typeof(OcrProfile));
