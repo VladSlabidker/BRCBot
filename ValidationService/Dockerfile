@@ -11,13 +11,11 @@ RUN dotnet restore "ValidationService/ValidationService.csproj"
 
 WORKDIR "/src/ValidationService"
 
-RUN dotnet tool install --global Microsoft.Playwright.CLI
-ENV PATH="$PATH:/root/.dotnet/tools"
+RUN dotnet tool install --global Microsoft.Playwright.CLI && \
+    export PATH="$PATH:/root/.dotnet/tools" && \
+    dotnet playwright install --with-deps
 
 RUN dotnet build "ValidationService.csproj" -c Release
-
-RUN /root/.dotnet/tools/dotnet-playwright install --with-deps
-
 RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
