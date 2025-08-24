@@ -83,6 +83,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       TELEGRAM__BOTTOKEN: ${TELEGRAM__BOTTOKEN}
+      ASPNETCORE_URLS: http://+:8080
       Storefront__BaseUrl: https://${DOMAIN}
     networks:
       - mybot
