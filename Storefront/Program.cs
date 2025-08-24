@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Configuration.AddJsonFile("appsettings.Development.Storefront.json");
 # endif
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddJsonFile("/app/appsettings.Storefront.json");
+builder.Configuration.AddJsonFile("appsettings.Storefront.json");
 UriConfig configurationUri = new UriConfig();
 builder.Configuration.GetSection(nameof(UriConfig)).Bind(configurationUri);
 

@@ -20,5 +20,6 @@ FROM base AS final
 WORKDIR /app
 ARG PROJECT_NAME
 COPY --from=publish /app/publish .
+COPY Data.SQL/appsettings*.json .
 ENTRYPOINT ["dotnet", "Data.SQL.dll"]
 
