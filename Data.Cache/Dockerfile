@@ -5,13 +5,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY . .
-
+COPY Data.Cache/appsettings*.json .
 ARG PROJECT_NAME
 RUN dotnet restore "Data.Cache/Data.Cache.csproj"
 
 WORKDIR "/src/Data.Cache"
-# Для диагностики (можно удалить позже)
-RUN echo "Смотрим содержимое /src/Data.Cache" && ls -la /src/Data.Cache
 
 RUN dotnet build "Data.Cache.csproj" -c Release -o /app/build
 
