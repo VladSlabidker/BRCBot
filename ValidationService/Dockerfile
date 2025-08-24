@@ -24,9 +24,27 @@ RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseA
 
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app/publish .
 
-# переносим скачанные браузеры Playwright
+# 👇 докидываем недостающие зависимости Chromium/Playwright
+RUN apt-get update && apt-get install -y \
+    libglib2.0-0 \
+    libnss3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libx11-6 \
+    libxcb1 \
+    libxcomposite1 \
+    libxrandr2 \
+    libgbm1 \
+    libpango-1.0-0 \
+    libcairo2 \
+    libasound2 \
+    fonts-liberation \
+    libxdamage1 \
+    libxext6 \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /app/publish .
 COPY --from=build /root/.cache/ms-playwright /root/.cache/ms-playwright
 
 ENTRYPOINT ["dotnet", "ValidationService.dll"]
