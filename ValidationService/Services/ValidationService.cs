@@ -5,6 +5,7 @@ using RpcOcrService;
 using Tesseract;
 using ValidationService.Interfaces;
 using static RpcOcrService.RpcOcrService;
+using Enum = System.Enum;
 using RpcReceipt = RpcValidationService.RpcReceipt;
 namespace ValidationService.Services;
 
@@ -32,7 +33,9 @@ public class ValidationService: IValidationService
     {
         if (ocrData == null)
             throw new TesseractException("No information from receipt was given");
-
+        
+        Console.WriteLine(($"OCR Data: {ocrData.Code}, {Enum.GetName((BankType)ocrData.BankId)}"));
+        
         (bool, string) result;
         
         result = (BankType)ocrData.BankId == BankType.Privat24

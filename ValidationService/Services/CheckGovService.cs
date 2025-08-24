@@ -13,7 +13,7 @@ public static class CheckGovService
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new() { Headless = true });
         var page = await browser.NewPageAsync();
-
+        Console.WriteLine("Заходим на сайт");
         await page.GotoAsync(baseUrl);
 
         try
@@ -43,7 +43,9 @@ public static class CheckGovService
             await page.WaitForSelectorAsync("#checkResult", new() { Timeout = 7000 });
 
             var resultText = await page.InnerTextAsync("#resultFlag");
-
+            
+            Console.WriteLine($"Результат со страницы \n{resultText}");
+            
             if (resultText.Contains("Помилка", StringComparison.OrdinalIgnoreCase))
                 return (false, "Сайт повернув помилку: код може бути недійсним або банк не підтримується");
 
