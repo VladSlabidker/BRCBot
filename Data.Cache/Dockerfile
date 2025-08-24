@@ -10,6 +10,9 @@ ARG PROJECT_NAME
 RUN dotnet restore "Data.Cache/Data.Cache.csproj"
 
 WORKDIR "/src/Data.Cache"
+# Для диагностики (можно удалить позже)
+RUN echo "Смотрим содержимое /src/Data.Cache" && ls -la /src/Data.Cache
+
 RUN dotnet build "Data.Cache.csproj" -c Release -o /app/build
 
 FROM build AS publish
