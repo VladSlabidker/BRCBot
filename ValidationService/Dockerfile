@@ -16,13 +16,13 @@ FROM build AS publish
 ARG PROJECT_NAME
 RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-RUN dotnet tool install --global Microsoft.Playwright.CLI \
-    && export PATH="$PATH:/root/.dotnet/tools" \
-    && playwright install
-
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+RUN dotnet tool install --global Microsoft.Playwright.CLI \
+    && playwright install
+
 ENV PATH="$PATH:/root/.dotnet/tools"
+
 ENTRYPOINT ["dotnet", "ValidationService.dll"]
