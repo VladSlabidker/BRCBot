@@ -196,9 +196,9 @@ services:
     networks:
       - mybot
 
-  # ==========================
+  # =========================
   # Nginx + HTTPS (Let's Encrypt)
-  # ==========================
+  # =========================
   nginx:
     image: nginx:stable
     container_name: nginx
