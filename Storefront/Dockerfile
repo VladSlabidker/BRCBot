@@ -20,6 +20,5 @@ FROM base AS final
 WORKDIR /app
 ARG PROJECT_NAME
 COPY --from=publish /app/publish .
-COPY Storefront/appsettings*.json . 
 ENTRYPOINT ["dotnet", "Storefront.dll"]
 

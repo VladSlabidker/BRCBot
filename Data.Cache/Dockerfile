@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY . .
-COPY Data.Cache/appsettings*.json .
+
 ARG PROJECT_NAME
 RUN dotnet restore "Data.Cache/Data.Cache.csproj"
 
@@ -21,6 +21,5 @@ FROM base AS final
 WORKDIR /app
 ARG PROJECT_NAME
 COPY --from=publish /app/publish .
-COPY Data.Cache/appsettings*.json .
 ENTRYPOINT ["dotnet", "Data.Cache.dll"]
 

@@ -33,7 +33,6 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-        <Content Include="appsettings.OcrService.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
     </ItemGroup>
 
 </Project>

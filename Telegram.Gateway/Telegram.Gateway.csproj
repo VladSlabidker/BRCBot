@@ -82,7 +82,6 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-      <Content Include="appsettings.Telegram.Gateway.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
     </ItemGroup>
 
 </Project>

@@ -37,7 +37,6 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-        <Content Include="appsettings.ValidationService.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
         
     </ItemGroup>
     

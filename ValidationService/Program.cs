@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Development.ValidationService.json");
 # endif
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration.AddJsonFile("appsettings.ValidationService.json");
 UriConfig configurationUri = new UriConfig();
 builder.Configuration.GetSection(nameof(UriConfig)).Bind(configurationUri);
 

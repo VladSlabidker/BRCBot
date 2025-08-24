@@ -20,6 +20,5 @@ FROM base AS final
 WORKDIR /app
 ARG PROJECT_NAME
 COPY --from=publish /app/publish .
-COPY ValidationService/appsettings*.json . 
 ENTRYPOINT ["dotnet", "ValidationService.dll"]
 
