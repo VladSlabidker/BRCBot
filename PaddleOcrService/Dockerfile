@@ -14,4 +14,4 @@ COPY . .
 
 ENV PYTHONUNBUFFERED=1
 
-CMD ["python", "-m", "app.worker"]
+CMD ["python", "-m", "worker"]
