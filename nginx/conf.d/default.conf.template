@@ -1,7 +1,6 @@
-# Файл: nginx/conf.d/default.conf.template
 server {
     listen 80;
-    server_name ${DOMAIN};
+    server_name $DOMAIN;
 
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
@@ -14,10 +13,10 @@ server {
 
 server {
     listen 443 ssl;
-    server_name ${DOMAIN};
+    server_name $DOMAIN;
 
-    ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
 
     location / {
         proxy_pass http://telegramgateway:5000;
@@ -28,4 +27,3 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 }
-
