@@ -22,20 +22,8 @@ builder.Services.AddGrpc(options =>
     options.Interceptors.Add<ExceptionHandlingInterceptor>();
 });
 
-builder.Services.AddGrpcClient<RpcOcrService.RpcOcrService.RpcOcrServiceClient>(opt => opt.Address = configurationUri.OcrService).ConfigurePrimaryHttpMessageHandler(() =>
-{
-    return new HttpClientHandler
-    {
-        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-    };
-});
-builder.Services.AddGrpcClient<RpcValidationService.RpcValidationService.RpcValidationServiceClient>(opt => opt.Address = configurationUri.ValidationService).ConfigurePrimaryHttpMessageHandler(() =>
-{
-    return new HttpClientHandler
-    {
-        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-    };
-});
+builder.Services.AddGrpcClient<RpcOcrService.RpcOcrService.RpcOcrServiceClient>(opt => opt.Address = configurationUri.OcrService);
+builder.Services.AddGrpcClient<RpcValidationService.RpcValidationService.RpcValidationServiceClient>(opt => opt.Address = configurationUri.ValidationService);
 
 builder.Services.AddAutoMapper(typeof(Program));
 

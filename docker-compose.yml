@@ -107,8 +107,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:80
-      UriConfig__OcrService: http://ocrservice:80
-      UriConfig__ValidationService: http://validationservice:80
+      UriConfig__OcrService: http://ocrservice:8080
+      UriConfig__ValidationService: http://validationservice:8080
     depends_on:
       - ocrservice
       - validationservice
