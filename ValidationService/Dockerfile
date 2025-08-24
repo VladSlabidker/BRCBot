@@ -16,7 +16,7 @@ ENV PATH="$PATH:/root/.dotnet/tools"
 
 RUN dotnet build "ValidationService.csproj" -c Release
 
-RUN dotnet playwright install --with-deps
+RUN /root/.dotnet/tools/dotnet-playwright install --with-deps
 
 RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
