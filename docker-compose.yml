@@ -79,6 +79,8 @@ services:
       args:
         PROJECT_NAME: Telegram.Gateway
     container_name: telegramgateway
+    ports:
+      - "8080:8080"
     restart: always
     environment:
       ASPNETCORE_ENVIRONMENT: Production
