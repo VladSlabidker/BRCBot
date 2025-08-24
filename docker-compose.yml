@@ -188,7 +188,6 @@ services:
       dockerfile: ./PaddleOcrService/Dockerfile
     container_name: paddleocrservice
     restart: always
-    command: python -m worker
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
