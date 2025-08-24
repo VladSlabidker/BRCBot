@@ -10,17 +10,14 @@ ARG PROJECT_NAME
 RUN dotnet restore "ValidationService/ValidationService.csproj"
 
 WORKDIR "/src/ValidationService"
-# Сначала добавляем пакет Playwright
+
 RUN dotnet add package Microsoft.Playwright
 
-# Затем билдим проект, чтобы Playwright мог найти зависимости
 RUN dotnet build "ValidationService.csproj" -c Release -o /app/build
 
-# Теперь устанавливаем CLI и скачиваем браузеры
 RUN dotnet tool install --global Microsoft.Playwright.CLI \
     && export PATH="$PATH:/root/.dotnet/tools" \
-    && dotnet build "ValidationService.csproj" \
-    && playwright install
+    && playwright install --with-deps
 
 FROM build AS publish
 ARG PROJECT_NAME
@@ -30,8 +27,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Копируем CLI и выставляем PATH
-COPY --from=build /root/.dotnet/tools /root/.dotnet/tools
-ENV PATH="$PATH:/root/.dotnet/tools"
+COPY --from=build /root/.cache/ms-playwright /root/.cache/ms-playwright
 
 ENTRYPOINT ["dotnet", "ValidationService.dll"]
