@@ -13,9 +13,9 @@ WORKDIR "/src/ValidationService"
 
 RUN dotnet add package Microsoft.Playwright
 
-RUN dotnet build "ValidationService.csproj" -c Release -o /app/build
+RUN dotnet build "ValidationService.csproj" -c Release
 
-RUN /bin/bash /app/build/playwright.sh install --with-deps
+RUN /bin/bash bin/Release/net8.0/playwright.sh install --with-deps
 
 FROM build AS publish
 ARG PROJECT_NAME
