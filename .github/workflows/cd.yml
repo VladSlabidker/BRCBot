@@ -28,7 +28,7 @@ jobs:
             echo "SA_PASSWORD=\"${{ secrets.SA_PASSWORD }}\"" > .env
             echo "RABBITMQ_USER=\"${{ secrets.RABBITMQ_USER }}\"" >> .env
             echo "RABBITMQ_PASS=\"${{ secrets.RABBITMQ_PASS }}\"" >> .env
-            echo "TELEGRAM_TOKEN=\"${{ secrets.TELEGRAM_TOKEN }}\"" >> .env
+            echo "TELEGRAM_BOTTOKEN=\"${{ secrets.TELEGRAM_BOTTOKEN }}\"" >> .env
             echo "DOMAIN=\"${{ secrets.DOMAIN }}\"" >> .env
             echo "REDIS_HOST=redis" >> .env
             echo "REDIS_PORT=6379" >> .env

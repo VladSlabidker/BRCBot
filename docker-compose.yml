@@ -82,7 +82,7 @@ services:
     restart: always
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      TELEGRAM__BOTTOKEN: ${TELEGRAM_BOTTOKEN}
       Storefront__BaseUrl: https://${DOMAIN}
     networks:
       - mybot
