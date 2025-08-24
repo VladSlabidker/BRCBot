@@ -30,6 +30,7 @@ jobs:
             echo "RABBITMQ_PASS=\"${{ secrets.RABBITMQ_PASS }}\"" >> .env
             echo "TELEGRAM__BOTTOKEN=\"${{ secrets.TELEGRAM_TOKEN }}\"" >> .env
             echo "DOMAIN=\"${{ secrets.DOMAIN }}\"" >> .env
+            envsubst '$DOMAIN' < default.conf.template > default.conf
             echo "REDIS_HOST=redis" >> .env
             echo "REDIS_PORT=6379" >> .env
             echo "RABBITMQ_HOST=rabbitmq" >> .env
