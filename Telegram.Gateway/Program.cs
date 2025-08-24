@@ -9,7 +9,7 @@ builder.Configuration.AddJsonFile("appsettings.Development.Telegram.Gateway.json
 builder.Configuration.AddEnvironmentVariables();
 string token = builder.Configuration["Telegram:BotToken"] 
                ?? throw new InvalidOperationException("Telegram token not configured");
-
+Console.WriteLine(token);
 builder.Services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(token));
 
 // Другие сервисы
