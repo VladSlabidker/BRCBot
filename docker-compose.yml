@@ -89,7 +89,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       TELEGRAM__BOTTOKEN: ${TELEGRAM__BOTTOKEN}
       ASPNETCORE_URLS: http://+:8080
-      Storefront__BaseUrl: https://${DOMAIN}
+      Storefront__BaseUrl: http://storefront:80
     networks:
       - mybot
 
@@ -106,6 +106,7 @@ services:
     restart: always
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:80
       UriConfig__OcrService: http://ocrservice:80
       UriConfig__ValidationService: http://validationservice:80
     depends_on:

@@ -16,13 +16,6 @@ builder.Services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(token));
 builder.Services.AddHttpClient("Storefront", client =>
     {
         client.BaseAddress = new Uri(builder.Configuration["Storefront:BaseUrl"]! ?? throw new InvalidOperationException("Storefront URL not configured"));
-    })
-    .ConfigurePrimaryHttpMessageHandler(() =>
-    {
-        return new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        };
     });
 
 builder.Services.AddScoped<ITelegramUpdateService, TelegramUpdateService>();
