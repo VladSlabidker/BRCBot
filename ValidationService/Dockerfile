@@ -13,7 +13,7 @@ WORKDIR "/src/ValidationService"
 
 RUN dotnet tool install --global Microsoft.Playwright.CLI && \
     export PATH="$PATH:/root/.dotnet/tools" && \
-    dotnet playwright install --with-deps
+    playwright install --with-deps
 
 RUN dotnet build "ValidationService.csproj" -c Release
 RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
