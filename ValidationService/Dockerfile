@@ -15,7 +15,7 @@ RUN dotnet add package Microsoft.Playwright
 
 RUN dotnet build "ValidationService.csproj" -c Release
 
-RUN /bin/bash bin/Release/net8.0/playwright.sh install --with-deps
+RUN dotnet playwright install --with-deps
 
 FROM build AS publish
 ARG PROJECT_NAME
