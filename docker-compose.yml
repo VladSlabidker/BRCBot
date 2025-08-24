@@ -212,17 +212,14 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./.env:/etc/nginx/.env
     entrypoint: >
-      /bin/sh -lc "set -a
-      && . /etc/nginx/.env
-      && set +a
-      && env | grep -E '^DOMAIN='
-      && envsubst '\$DOMAIN'
-           < /etc/nginx/conf.d/default.conf.template
-           > /etc/nginx/conf.d/default.conf
-      && echo '---- generated default.conf ----'
-      && cat /etc/nginx/conf.d/default.conf
-      && echo '--------------------------------'
-      && nginx -g 'daemon off;'"
+      /bin/sh -c "set -a; . /etc/nginx/.env; set +a;
+      env | grep -E '^DOMAIN=';
+      envsubst '\$DOMAIN' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf;
+      echo '---- generated default.conf ----';
+      cat /etc/nginx/conf.d/default.conf;
+      echo '--------------------------------';
+      nginx -g 'daemon off;'"
+
     depends_on:
       - telegramgateway
       - storefront
