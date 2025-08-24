@@ -11,8 +11,11 @@ RUN dotnet restore "ValidationService/ValidationService.csproj"
 
 WORKDIR "/src/ValidationService"
 
-RUN dotnet add package Microsoft.Playwright
+RUN dotnet tool install --global Microsoft.Playwright.CLI
 
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+RUN dotnet add package Microsoft.Playwright
 RUN dotnet build "ValidationService.csproj" -c Release
 
 RUN dotnet playwright install --with-deps
