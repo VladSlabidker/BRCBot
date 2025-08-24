@@ -15,7 +15,7 @@ public static class BankReceiptParserService
         };
         
         // Пример: "Квитанція № H4XE-8PXM-BBTP-481A від 06.07.2025"
-        var codeMatch = Regex.Match(text, @"Квитанц[іi]я Ne\s*([A-Z0-9\-]+)");
+        var codeMatch = Regex.Match(text, @"([A-ZА-Я0-9]{4}-[A-ZА-Я0-9]{4}-[A-ZА-Я0-9]{4}-[A-ZА-Я0-9]{4})", RegexOptions.IgnoreCase);
         if (codeMatch.Success)
             receipt.Code = codeMatch.Groups[1].Value.Trim();
         
@@ -31,6 +31,8 @@ public static class BankReceiptParserService
                 receipt.Amount = amount;
         }
 
+        Console.WriteLine($"Получили чек вида: \nКод: {receipt.Code}, Банк:\n{Enum.GetName(typeof(BankType), bankType)}");
+        
         return receipt;
     }
     
