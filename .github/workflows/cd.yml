@@ -30,6 +30,7 @@ jobs:
             echo "RABBITMQ_PASS=\"${{ secrets.RABBITMQ_PASS }}\"" >> .env
             echo "TELEGRAM__BOTTOKEN=\"${{ secrets.TELEGRAM_TOKEN }}\"" >> .env
             cd ~/mybot/nginx/conf.d
+            echo "DOMAIN=${{ secrets.DOMAIN }}"
             export DOMAIN="${{ secrets.DOMAIN }}"
             envsubst '$DOMAIN' < default.conf.template > default.conf
             cd ~/mybot
