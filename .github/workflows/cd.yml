@@ -29,11 +29,7 @@ jobs:
             echo "RABBITMQ_USER=\"${{ secrets.RABBITMQ_USER }}\"" >> .env
             echo "RABBITMQ_PASS=\"${{ secrets.RABBITMQ_PASS }}\"" >> .env
             echo "TELEGRAM__BOTTOKEN=\"${{ secrets.TELEGRAM_TOKEN }}\"" >> .env
-            cd ~/mybot/nginx/conf.d
-            echo "DOMAIN=${{ secrets.DOMAIN }}"
-            export DOMAIN="${{ secrets.DOMAIN }}"
-            envsubst '$DOMAIN' < default.conf.template > default.conf
-            cd ~/mybot
+            echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
             echo "REDIS_HOST=redis" >> .env
             echo "REDIS_PORT=6379" >> .env
             echo "RABBITMQ_HOST=rabbitmq" >> .env
