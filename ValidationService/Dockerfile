@@ -12,21 +12,17 @@ RUN dotnet restore "ValidationService/ValidationService.csproj"
 WORKDIR "/src/ValidationService"
 
 RUN dotnet tool install --global Microsoft.Playwright.CLI
-
 ENV PATH="$PATH:/root/.dotnet/tools"
 
-RUN dotnet add package Microsoft.Playwright
 RUN dotnet build "ValidationService.csproj" -c Release
 
 RUN dotnet playwright install --with-deps
 
-FROM build AS publish
-ARG PROJECT_NAME
 RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
 COPY --from=build /root/.cache/ms-playwright /root/.cache/ms-playwright
 
