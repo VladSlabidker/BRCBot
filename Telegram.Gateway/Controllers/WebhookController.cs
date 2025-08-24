@@ -5,7 +5,7 @@ using Telegram.Gateway.Interfaces;
 namespace Telegram.Gateway.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/webhook")]
 public class WebhookController : ControllerBase
 {
     private readonly ITelegramUpdateService _updateService;
