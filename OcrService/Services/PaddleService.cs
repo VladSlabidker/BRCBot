@@ -39,6 +39,7 @@ public class PaddleService : IOcrService
         var response = await _client.SendRequestAndWaitForResponseAsync(request, cancellationToken);
 
         string text = response.Text;
+        Console.WriteLine(text);
         
         if(string.IsNullOrWhiteSpace(text))
             throw new InvalidDataException($"Failed to preproccess the image: {response.Error}");
