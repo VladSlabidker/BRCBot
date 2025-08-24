@@ -210,9 +210,14 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
-    env_file:
-      - .env
-    entrypoint: /bin/sh -c "envsubst '\$DOMAIN' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && cat /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+      - ./.env:/etc/nginx/.env
+    entrypoint: >
+      /bin/sh -c ". /etc/nginx/.env &&
+      envsubst '\$DOMAIN'
+      < /etc/nginx/conf.d/default.conf.template
+      > /etc/nginx/conf.d/default.conf &&
+      cat /etc/nginx/conf.d/default.conf &&
+      nginx -g 'daemon off;'"
     depends_on:
       - telegramgateway
       - storefront
