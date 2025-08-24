@@ -11,21 +11,17 @@ RUN dotnet restore "ValidationService/ValidationService.csproj"
 
 WORKDIR "/src/ValidationService"
 
-# Сначала собираем проект (Playwright попадает в bin)
 RUN dotnet build "ValidationService.csproj" -c Release
 
-# Теперь ставим CLI и качаем браузеры
 RUN dotnet tool install --global Microsoft.Playwright.CLI && \
     export PATH="$PATH:/root/.dotnet/tools" && \
     playwright install --with-deps
 
-# Публикуем
 RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 
-# 👇 докидываем недостающие зависимости Chromium/Playwright
 RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
     libnss3 \
@@ -42,6 +38,13 @@ RUN apt-get update && apt-get install -y \
     fonts-liberation \
     libxdamage1 \
     libxext6 \
+    libxfixes3 \
+    libdrm2 \
+    libexpat1 \
+    libgtk-3-0 \
+    libxrender1 \
+    libxtst6 \
+    libpulse0 \
  && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
