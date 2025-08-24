@@ -15,7 +15,7 @@ public static class CheckGovService
         var page = await browser.NewPageAsync();
         Console.WriteLine("Заходим на сайт");
         await page.GotoAsync(baseUrl);
-
+        
         try
         {
             // Открытие выпадающего списка
@@ -43,9 +43,9 @@ public static class CheckGovService
             await page.WaitForSelectorAsync("#checkResult", new() { Timeout = 7000 });
 
             var resultText = await page.InnerTextAsync("#resultFlag");
-            
+
             Console.WriteLine($"Результат со страницы \n{resultText}");
-            
+
             if (resultText.Contains("Помилка", StringComparison.OrdinalIgnoreCase))
                 return (false, "Сайт повернув помилку: код може бути недійсним або банк не підтримується");
 
@@ -71,6 +71,10 @@ public static class CheckGovService
         catch (TimeoutException)
         {
             return (false, "Не вдалося отримати результат: таймаут або помилка сайту.");
+        }
+        catch (Exception ex)
+        {
+            return (false, ex.Message);
         }
     }
     

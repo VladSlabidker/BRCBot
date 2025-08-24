@@ -30,7 +30,7 @@ public class ExceptionHandlingInterceptor: Interceptor
         }        
         catch (InvalidReceiptException ex)
         {
-            _logger.LogWarning(ex, "Неправильный чек");
+            _logger.LogWarning(ex, $"Неправильный чек: {ex.Message}");
 
             throw new InvalidReceiptException(ex.Message);
         }
