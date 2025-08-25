@@ -1,6 +1,8 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+﻿# Финальный образ на базе Playwright + .NET
+FROM mcr.microsoft.com/playwright/dotnet:v1.47.0-focal AS base
 WORKDIR /app
 
+# Стадия сборки
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
@@ -10,52 +12,28 @@ ARG PROJECT_NAME
 RUN dotnet restore "ValidationService/ValidationService.csproj"
 
 WORKDIR "/src/ValidationService"
-
 RUN dotnet build "ValidationService.csproj" -c Release
 
+# Установка Playwright CLI и браузера Chromium
 RUN dotnet tool install --global Microsoft.Playwright.CLI && \
     export PATH="$PATH:/root/.dotnet/tools" && \
     playwright install --with-deps chromium
 
+# Публикуем проект
 RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+# Финальный образ
+FROM mcr.microsoft.com/playwright/dotnet:v1.47.0-focal AS final
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    libdbus-glib-1-2 \
-    libdbus-1-3 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libcups2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxfixes3 \
-    libxrandr2 \
-    libgbm1 \
-    libasound2 \
-    libpangocairo-1.0-0 \
-    libpango-1.0-0 \
-    libcairo2 \
-    libgtk-3-0 \
-    libnss3 \
-    libdrm2 \
-    libexpat1 \
-    libxshmfence1 \
-    libx11-6 \
-    libx11-xcb1 \
-    libxcb1 \
-    libxcb-dri3-0 \
-    libxcb-dri2-0 \
-    libxcb-present0 \
-    libxcb-sync1 \
-    libxtst6 \
-    fonts-liberation \
-    xdg-utils \
- && rm -rf /var/lib/apt/lists/*
-
+# Копируем опубликованное приложение
 COPY --from=build /app/publish .
+
+# Копируем Playwright браузеры и кэш
 COPY --from=build /root/.cache/ms-playwright /root/.cache/ms-playwright
 
+# Переменная окружения для Playwright (указывает путь к браузерам)
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+# Запуск микросервиса
 ENTRYPOINT ["dotnet", "ValidationService.dll"]
