@@ -1,5 +1,5 @@
 ﻿# Финальный образ на базе Playwright + .NET
-FROM mcr.microsoft.com/playwright/dotnet:v1.47.0-focal AS base
+FROM mcr.microsoft.com/playwright/dotnet:v1.54.0-noble AS base
 WORKDIR /app
 
 # Стадия сборки
@@ -23,7 +23,7 @@ RUN dotnet tool install --global Microsoft.Playwright.CLI && \
 RUN dotnet publish "ValidationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Финальный образ
-FROM mcr.microsoft.com/playwright/dotnet:v1.47.0-focal AS final
+FROM mcr.microsoft.com/playwright/dotnet:v1.54.0-noble AS final
 WORKDIR /app
 
 # Копируем опубликованное приложение
