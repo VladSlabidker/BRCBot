@@ -19,7 +19,7 @@ public static class CheckGovService
             WaitUntil = WaitUntilState.NetworkIdle,
             Timeout = 60000
         });
-        
+        await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
         try
         {
             Console.WriteLine($"Открываем страницу.");

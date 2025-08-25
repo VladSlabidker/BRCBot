@@ -23,28 +23,36 @@ FROM base AS final
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    libglib2.0-0 \
-    libnss3 \
-    libatk1.0-0 \
+    libdbus-glib-1-2 \
+    libdbus-1-3 \
     libatk-bridge2.0-0 \
-    libx11-6 \
-    libxcb1 \
+    libatk1.0-0 \
+    libcups2 \
+    libxkbcommon0 \
     libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
     libxrandr2 \
     libgbm1 \
+    libasound2 \
+    libpangocairo-1.0-0 \
     libpango-1.0-0 \
     libcairo2 \
-    libasound2 \
-    fonts-liberation \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
+    libgtk-3-0 \
+    libnss3 \
     libdrm2 \
     libexpat1 \
-    libgtk-3-0 \
-    libxrender1 \
+    libxshmfence1 \
+    libx11-6 \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcb-dri3-0 \
+    libxcb-dri2-0 \
+    libxcb-present0 \
+    libxcb-sync1 \
     libxtst6 \
-    libpulse0 \
+    fonts-liberation \
+    xdg-utils \
  && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
