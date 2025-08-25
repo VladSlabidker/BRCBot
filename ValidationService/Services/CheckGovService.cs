@@ -11,7 +11,7 @@ public static class CheckGovService
         const string baseUrl = "https://check.gov.ua";
         
         using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Webkit.LaunchAsync(new() { Headless = true, Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" } });
+        await using var browser = await playwright.Chromium.LaunchAsync(new() { Headless = true, Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" } });
         var page = await browser.NewPageAsync();
         Console.WriteLine("Заходим на сайт");
         await page.GotoAsync(baseUrl, new()
