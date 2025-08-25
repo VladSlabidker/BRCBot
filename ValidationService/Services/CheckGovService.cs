@@ -14,14 +14,27 @@ public static class CheckGovService
         await using var browser = await playwright.Chromium.LaunchAsync(new() { Headless = true });
         var page = await browser.NewPageAsync();
         Console.WriteLine("Заходим на сайт");
-        await page.GotoAsync(baseUrl);
+        await page.GotoAsync(baseUrl, new()
+        {
+            WaitUntil = WaitUntilState.NetworkIdle,
+            Timeout = 60000
+        });
         
         try
         {
             Console.WriteLine($"Открываем страницу.");
             // Открытие выпадающего списка
-            await page.WaitForSelectorAsync(".select-selected");
-            await page.ClickAsync(".select-selected");
+            Console.WriteLine(await page.ContentAsync());
+            await page.WaitForSelectorAsync(".select-selected", new()
+            {
+                Timeout = 60000,
+                State = WaitForSelectorState.Visible
+            });
+            await page.ClickAsync(".select-selected", new()
+            {
+                Timeout = 30000,
+                Force = true // иногда нужно
+            });
             Console.WriteLine($"Кликнули на селектор.");
             // Поиск и выбор нужного банка
             var bankText = GetBankText(bankType);
