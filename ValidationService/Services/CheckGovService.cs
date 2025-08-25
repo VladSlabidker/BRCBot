@@ -18,16 +18,20 @@ public static class CheckGovService
         
         try
         {
+            Console.WriteLine($"Открываем страницу.");
             // Открытие выпадающего списка
             await page.WaitForSelectorAsync(".select-selected");
             await page.ClickAsync(".select-selected");
-
+            Console.WriteLine($"Кликнули на селектор.");
             // Поиск и выбор нужного банка
             var bankText = GetBankText(bankType);
+            Console.WriteLine($"Банк: {bankText}.");
             await page.WaitForSelectorAsync(".selection-list");
+            Console.WriteLine($"Выбираем банк");
             await page.ClickAsync($".selection-list div:text('{bankText}')");
-
+            Console.WriteLine($"Выбрали банк");
             // Ввод кода вручную через JS
+            Console.WriteLine($"Вставляем код:{code}");
             await page.EvaluateAsync($@"
                 () => {{
                     const input = document.querySelector('#references');
@@ -36,22 +40,25 @@ public static class CheckGovService
                 }}");
 
             // Ждём разблокировку кнопки и кликаем по ней
+            Console.WriteLine($"Ждем разблокировку");
             await Task.Delay(500);
+            Console.WriteLine($"Дождались разблокировку");
+            Console.WriteLine($"Проверяем");
             await page.EvaluateAsync("document.querySelector('#submit').click()");
 
             // Ожидаем появления блока результата
-            await page.WaitForSelectorAsync("#checkResult", new() { Timeout = 7000 });
-
+            Console.WriteLine($"Ожидаем результат");
+            await page.WaitForSelectorAsync("#checkResult", new() { Timeout = 30000 });
+            Console.WriteLine($"Получили результат");
             var resultText = await page.InnerTextAsync("#resultFlag");
 
             Console.WriteLine($"Результат со страницы \n{resultText}");
 
             if (resultText.Contains("Помилка", StringComparison.OrdinalIgnoreCase))
-                return (false, "Сайт повернув помилку: код може бути недійсним або банк не підтримується");
+                throw new InvalidDataException(resultText);
 
             if (resultText.Contains("Оплачена", StringComparison.OrdinalIgnoreCase))
             {
-                // Пробуем достать ссылку
                 var downloadHref = await page.GetAttributeAsync("#resultFile", "href");
 
                 if (!string.IsNullOrWhiteSpace(downloadHref))
