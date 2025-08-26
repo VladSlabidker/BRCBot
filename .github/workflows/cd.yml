@@ -40,8 +40,8 @@ jobs:
             echo "RABBITMQ_PORT=5672" >> .env
             echo "SQL_DATASOURCE=sqlserver,1433" >> .env
             echo "SQL_INITIAL_CATALOG=ReceiptBot" >> .env
-            echo "SQL_USER=myuser" >> .env
-            echo "SQL_PASSWORD=$mypassword" >> .env
+            echo "SQL_USER=sa" >> .env
+            echo "SQL_PASSWORD=${{ secrets.SA_PASSWORD }}" >> .env
             echo "SQL_TRUST_CERTIFICATE=true" >> .env
             echo "SQL_INTEGRATED_SECURITY=false" >> .env
 
