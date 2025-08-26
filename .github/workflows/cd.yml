@@ -26,9 +26,9 @@ jobs:
 
             # Генерируем .env построчно через echo
             echo "SA_PASSWORD=\"${{ secrets.SA_PASSWORD }}\"" > .env
-            echo "PROXY_SERVER=\"${{ secrets.PROXY_SERVER }}"" >> .env
-            echo "PROXY_USER=\"${{ secrets.PROXY_USER }}"" >> .env
-            echo "PROXY_PASS=\"${{ secrets.PROXY_PASS }}"" >> .env
+            echo "PROXY_SERVER=${{ secrets.PROXY_SERVER }}" >> .env
+            echo "PROXY_USER=${{ secrets.PROXY_USER }}" >> .env
+            echo "PROXY_PASS=${{ secrets.PROXY_PASS }}" >> .env
             echo "RABBITMQ_USER=\"${{ secrets.RABBITMQ_USER }}\"" >> .env
             echo "RABBITMQ_PASS=\"${{ secrets.RABBITMQ_PASS }}\"" >> .env
             echo "TELEGRAM__BOTTOKEN=\"${{ secrets.TELEGRAM_TOKEN }}\"" >> .env
