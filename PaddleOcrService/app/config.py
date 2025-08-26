@@ -11,6 +11,5 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-# factory function for DI
 def get_settings() -> Settings:
     return Settings()

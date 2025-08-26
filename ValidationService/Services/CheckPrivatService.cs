@@ -20,28 +20,23 @@ public static class CheckPrivatService
 
         await page.WaitForSelectorAsync("#docNumber");
 
-        // Ввод кода вручную с генерацией события
         await page.EvaluateAsync($@"
             () => {{
                 const input = document.querySelector('#docNumber');
                 input.value = '{code}';
                 input.dispatchEvent(new Event('input', {{ bubbles: true }}));
             }}");
-
-        // Клик по кнопке "Перевірити зараз"
+        
         await page.ClickAsync("button.validate-btn");
 
         try
         {
-            // Ожидаем появления блока с результатом
             await page.WaitForSelectorAsync(".after_send_block", new() { Timeout = 7000 });
-
-            // Получаем ссылку из download_link
+            
             var href = await page.GetAttributeAsync("#download_link", "href");
 
             if (!string.IsNullOrEmpty(href))
             {
-                // Превращаем в абсолютную ссылку, если нужно
                 var fullLink = href.StartsWith("https", StringComparison.OrdinalIgnoreCase)
                     ? href
                     : $"{baseUrl}{href}";

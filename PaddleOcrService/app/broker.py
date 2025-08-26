@@ -46,7 +46,6 @@ class RabbitMQBroker(BrokerInterface):
         self._connection = pika.BlockingConnection(self._params)
         self._channel = self._connection.channel()
 
-        # Очередь запросов (C# -> Python)
         self._channel.queue_declare(queue=self.settings.request_queue, durable=True)
 
     def publish(self, routing_key: str, body: bytes, properties: Optional[pika.BasicProperties] = None):

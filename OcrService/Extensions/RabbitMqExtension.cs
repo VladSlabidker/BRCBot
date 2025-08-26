@@ -9,7 +9,6 @@ namespace OcrService.Extensions
     {
         public static void AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
         {
-            // Читаем конфиг
             var rabbitMqConfig = configuration
                 .GetSection(nameof(RabbitMqConfig))
                 .Get<RabbitMqConfig>() ?? throw new InvalidOperationException("RabbitMqConfig section is missing");
@@ -23,17 +22,14 @@ namespace OcrService.Extensions
             if (string.IsNullOrWhiteSpace(rabbitMqConfig.ResponseQueueName))
                 throw new InvalidOperationException("RabbitMqConfig.ResponseQueueName is not set");
 
-            // Регистрируем конфигурацию для IOptions<RabbitMqConfig>
             services.Configure<RabbitMqConfig>(configuration.GetSection(nameof(RabbitMqConfig)));
 
-            // Регистрируем клиента с передачей всех параметров
             services.AddSingleton<IRabbitMqClient>(sp =>
             {
                 var cfg = sp.GetRequiredService<IOptions<RabbitMqConfig>>().Value;
 
                 var client = new RabbitMqClient(cfg);
 
-                // Инициализация клиента
                 client.InitializeAsync().GetAwaiter().GetResult();
 
                 return client;

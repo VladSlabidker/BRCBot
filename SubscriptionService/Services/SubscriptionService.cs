@@ -14,7 +14,6 @@ public class SubscriptionService : ISubscriptionService
 
     public Task<bool> IsActiveAsync(long userId)
     {
-        // заглушка — всегда true
         return Task.FromResult(true);
     }
 
@@ -28,7 +27,5 @@ public class SubscriptionService : ISubscriptionService
         var result = await _billing.ChargeAsync(message.UserId, message.Amount, message.Type);
 
         Console.WriteLine($"[Billing] UserId: {message.UserId}, Success: {result.Success}");
-
-        // Здесь можно сохранить в БД Payment / Subscription
     }
 }

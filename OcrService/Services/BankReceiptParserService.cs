@@ -13,13 +13,11 @@ public static class BankReceiptParserService
         {
             BankId = (int)bankType
         };
-        
-        // Пример: "Квитанція № H4XE-8PXM-BBTP-481A від 06.07.2025"
+
         var codeMatch = Regex.Match(text, @"([A-ZА-Я0-9]{4}-[A-ZА-Я0-9]{4}-[A-ZА-Я0-9]{4}-[A-ZА-Я0-9]{4})", RegexOptions.IgnoreCase);
         if (codeMatch.Success)
             receipt.Code = codeMatch.Groups[1].Value.Trim();
-        
-        // Пример: "Сума \(грн\)\s+1 878.00"
+
         var amountMatch = Regex.Match(text, @"Сума\s*\(грн\)[^\d]*([\d\s]+,\d{2}|\d+.\d{2})");
         if (amountMatch.Success)
         {
@@ -43,12 +41,10 @@ public static class BankReceiptParserService
             BankId = (int)bankType
         };
 
-        //Пример: Код документа P24A4543340891D7379
         var codeMatch = Regex.Match(text, @"Код документа\s+([A-Z0-9]+)");
         if (codeMatch.Success)
             receipt.Code = codeMatch.Groups[1].Value;
 
-        //Пример: Сума 16418,00
         var amountMatch = Regex.Match(text, @"Сума\s+([\d\s]+[.,]\d{2})");
         if (amountMatch.Success)
         {
@@ -59,7 +55,6 @@ public static class BankReceiptParserService
             if (double.TryParse(amountStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var amount))
                 receipt.Amount = amount;
         }
-
         return receipt;
     }    
     
@@ -70,7 +65,6 @@ public static class BankReceiptParserService
             BankId = (int)bankType
         };
 
-        //Ппример: Код*: DA21-AC1E-68EE-358D
         var codeMatch = Regex.Match(
             text,
             @"\b([A-Z0-9]{4})[-\s]*([A-Z0-9]{4})[-\s]*([A-Z0-9]{4})[-\s]*([A-Z0-9]{4})\b",
@@ -81,8 +75,7 @@ public static class BankReceiptParserService
         {
             receipt.Code = $"{codeMatch.Groups[1].Value}-{codeMatch.Groups[2].Value}-{codeMatch.Groups[3].Value}-{codeMatch.Groups[4].Value}";
         }
-        
-        //Пример: Сума: 2 501.00
+
         var amountMatch = Regex.Match(text, @"Сума:\s*([\d\s]+[.,]\d{2})");
         if (amountMatch.Success)
         {
@@ -103,18 +96,17 @@ public static class BankReceiptParserService
         {
             BankId = (int)bankType
         };
-        // Пример: "Платіжна інструкція № 49VE-82IF-72IF-5C0V від 29.06.2025"
+
         var codeMatch = Regex.Match(text, @"Платіжна інструкц[іi]я №\s*([A-Z0-9\-]+)");
         if (codeMatch.Success)
             receipt.Code = codeMatch.Groups[1].Value.Trim();
-        
-        // Пример: "Сума: 4 500,00 грн"
+
         var amountMatch = Regex.Match(text, @"Сума\s*[:\-]?\s*([\d\s]+[,\.]\d{2})");
         if (amountMatch.Success)
         {
             var amountStr = amountMatch.Groups[1].Value
-                .Replace(" ", "") // убираем пробелы
-                .Replace(",", "."); // заменяем запятую на точку
+                .Replace(" ", "")
+                .Replace(",", ".");
 
             if (double.TryParse(amountStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var amount))
                 receipt.Amount = amount;

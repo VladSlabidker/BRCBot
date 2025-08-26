@@ -23,19 +23,15 @@ public class PaddleService : IOcrService
     {
         if (cancellationToken.IsCancellationRequested)
             return await Task.FromCanceled<Receipt>(cancellationToken);
-
-        // Убираем префикс, если есть
+        
         if (base64.Contains(","))
             base64 = base64.Split(',')[1];
-
-        // Создаём запрос
+        
         var request = new OcrRequest
         {
             ImageBase64 = base64
-            // CorrelationId будет создан внутри RabbitMqClient
         };
-
-        // Отправляем и ждём ответа
+        
         var response = await _client.SendRequestAndWaitForResponseAsync(request, cancellationToken);
 
         string text = response.Text;
@@ -43,8 +39,7 @@ public class PaddleService : IOcrService
         
         if(string.IsNullOrWhiteSpace(text))
             throw new InvalidDataException($"Failed to preproccess the image: {response.Error}");
-        
-        // Логика определения банка (как в TesseractService)
+
         const string pattern = @"\b(?:Приватбанк|Універсал\s*банк|Банк\s*Власний\s*Рахунок|Банк\s*Восток|Восток\s*Банк|МТБ\s*Банк|MTB\s*Bank|monobank|Universal\s*Bank|privatbank)\b";
         var bankName = Regex.Match(text, pattern,
             RegexOptions.IgnoreCase |

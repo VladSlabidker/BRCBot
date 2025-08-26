@@ -19,7 +19,6 @@ def _on_message_factory(channel, default_response_queue, ocr_service: OCRService
         try:
             print(f"Получено сообщение: \nHeaders: {properties}")
             print(type(body))
-            # Разбираем входящее сообщение
             try:
                 payload = json.loads(body.decode("utf-8"))
                 print(f"Payload: {payload}")
@@ -50,17 +49,16 @@ def _on_message_factory(channel, default_response_queue, ocr_service: OCRService
                 "CorrelationId": correlationId
             }
             
-            # Определяем, куда отправлять ответ
             reply_to = getattr(properties, "reply_to", None)
             
             if not reply_to:
-                reply_to = getattr(properties, "replyTo", None)  # fallback
+                reply_to = getattr(properties, "replyTo", None)
                 
             if not reply_to:
-                reply_to = payload.get("responseAddress", {})  # fallback
+                reply_to = payload.get("responseAddress", {})
             
             if not reply_to:
-                reply_to = payload.get("replyTo", {})  # fallback
+                reply_to = payload.get("replyTo", {})
             
             if not reply_to:
                 print("NO REPLY_TO FOUND")
@@ -68,7 +66,6 @@ def _on_message_factory(channel, default_response_queue, ocr_service: OCRService
             if reply_to:
                 incoming_envelope = json.loads(body.decode("utf-8"))
 
-                # Заменяем содержимое message на свой результат
                 incoming_envelope["message"] = result_data
 
                 headers = {
@@ -100,11 +97,9 @@ def _run():
     broker = RabbitMQBroker(settings)
     ocr_service = OCRService()
 
-    # start RabbitMQ consumer
     on_message = _on_message_factory(broker, settings.response_queue, ocr_service)
     broker.start_consume(on_message)
 
-    # run uvicorn web server in same process (dev convenience)
     config = uvicorn.Config("app.main:app", host="0.0.0.0", port=8000, log_level="info")
     server = uvicorn.Server(config)
 

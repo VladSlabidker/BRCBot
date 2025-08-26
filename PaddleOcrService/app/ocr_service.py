@@ -11,10 +11,9 @@ def _strip_data_prefix(s: str) -> str:
 
 
 class OCRService:
-    # Сопоставление пользовательских кодов с кодами EasyOCR
     LANG_MAP = {  
-        "ru": "ru",    # русский
-        "en": "en",    # английский
+        "ru": "ru",
+        "en": "en",
     }
 
     def __init__(self, langs_priority: List[str] = None):
@@ -87,7 +86,6 @@ class OCRService:
             pil_img = self._preprocess(pil_img)
             img_np = np.array(pil_img)
 
-            # EasyOCR
             try:
                 reader = self._get_easy(self.langs_priority)
                 result = reader.readtext(img_np)

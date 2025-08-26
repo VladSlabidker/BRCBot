@@ -16,8 +16,7 @@ public class TelegramUpdateService : ITelegramUpdateService
     private readonly ITelegramBotClient _botClient;
     private readonly IHttpClientFactory _httpFactory;
     private readonly ILogger<TelegramUpdateService> _logger;
-
-    // Храним: какой пользователь ждет чек
+    
     private static readonly Dictionary<long, bool> _waitingForReceipt = new();
 
     public TelegramUpdateService(
@@ -37,7 +36,6 @@ public class TelegramUpdateService : ITelegramUpdateService
             var msg = update.Message!;
             var chatId = msg.Chat.Id;
 
-            // Команда /start
             if (msg.Text == "/start")
             {
                 var keyboard = new ReplyKeyboardMarkup(new[]
@@ -50,12 +48,11 @@ public class TelegramUpdateService : ITelegramUpdateService
                 };
 
                 await _botClient.SendMessage(chatId,
-                    "Привет!",
+                    "Привет!\n Пока лишь работает проверка чеков Mono. Ждите обновлений",
                     replyMarkup: keyboard);
                 return;
             }
-
-            // Кнопка "Проверить чек"
+            
             if (msg.Text == "🧾 Проверить чек")
             {
                 _waitingForReceipt[chatId] = true;
@@ -65,7 +62,6 @@ public class TelegramUpdateService : ITelegramUpdateService
                 return;
             }
 
-            // Кнопка "Сообщить об ошибке"
             if (msg.Text == "⚠️ Сообщить об ошибке")
             {
                 await _botClient.SendMessage(chatId,
@@ -73,8 +69,7 @@ public class TelegramUpdateService : ITelegramUpdateService
                     parseMode: ParseMode.Markdown);
                 return;
             }
-
-            // Скриншот после кнопки
+            
             if (msg.Photo != null && _waitingForReceipt.TryGetValue(chatId, out bool waiting) && waiting)
             {
                 var bestPhoto = msg.Photo.OrderByDescending(p => p.FileSize).First();
@@ -107,15 +102,11 @@ public class TelegramUpdateService : ITelegramUpdateService
 
                     if (result.IsValid)
                     {
-                        var checkedAt = DateTimeOffset.FromUnixTimeSeconds(result.CheckedAt.Seconds).ToLocalTime();
-
                         var text = $"""
                                     ✅ Чек успешно распознан!
 
                                     📄 Код: {result.Code}
-                                    💳 Сумма: {result.Amount:F2} грн
                                     🏦 Банк: {Enum.GetName((BankType)result.BankId)}
-                                    📅 Проверен: {checkedAt:dd.MM.yyyy HH:mm:ss}
                                     🔗 [Посмотреть в банке]({result.Link})
                                      
                                     По всем вопросам пишите @slabidker
@@ -156,7 +147,6 @@ public class TelegramUpdateService : ITelegramUpdateService
                 return;
             }
 
-            // Прочие сообщения
             await _botClient.SendMessage(chatId, "Неправильная команда, введите пожалуйста /start и следуйте инструкциям");
         }
     }

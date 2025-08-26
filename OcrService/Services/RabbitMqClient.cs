@@ -32,22 +32,19 @@ public sealed class RabbitMqClient : IRabbitMqClient, IAsyncDisposable
 
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();
-
-        // Очередь запросов
+        
         await _channel.ExchangeDeclareAsync($"{_config.RequestQueueName}_exchange", ExchangeType.Direct, durable: true);
         await _channel.QueueDeclareAsync(_config.RequestQueueName, durable: true, exclusive: false, autoDelete: false);
         await _channel.QueueBindAsync(_config.RequestQueueName, $"{_config.RequestQueueName}_exchange", _config.RequestQueueName);
-
-        // Очередь ответов
+        
         await _channel.ExchangeDeclareAsync($"{_config.ResponseQueueName}_exchange", ExchangeType.Direct, durable: true);
         await _channel.QueueDeclareAsync(_config.ResponseQueueName, durable: true, exclusive: false, autoDelete: false);
         await _channel.QueueBindAsync(_config.ResponseQueueName, $"{_config.ResponseQueueName}_exchange", _config.ResponseQueueName);
-
-        // Консюмер для ответов
+        
         var consumer = new AsyncEventingBasicConsumer(_channel);
         consumer.ReceivedAsync += async (model, ea) =>
         {
-            var body = ea.Body.ToArray(); // ← исправлено
+            var body = ea.Body.ToArray();
             var json = Encoding.UTF8.GetString(body);
             var message = JsonSerializer.Deserialize<OcrResponse>(json, _jsonOptions);
 
@@ -73,8 +70,7 @@ public sealed class RabbitMqClient : IRabbitMqClient, IAsyncDisposable
         _pendingRequests[request.CorrelationId] = tcs;
 
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request, _jsonOptions));
-
-        // Новый способ создания свойств
+        
         var props = new BasicProperties
         {
             ContentType = "application/json",
@@ -82,8 +78,7 @@ public sealed class RabbitMqClient : IRabbitMqClient, IAsyncDisposable
             CorrelationId = request.CorrelationId.ToString(),
             ReplyTo = _config.ResponseQueueName
         };
-
-        // Generic метод, явно указываем тип
+        
         await _channel.BasicPublishAsync(
             exchange: $"{_config.RequestQueueName}_exchange",
             routingKey: _config.RequestQueueName,

@@ -37,7 +37,7 @@ public static class CheckGovService
         try
         {
             Console.WriteLine($"Открываем страницу.");
-            // Открытие выпадающего списка
+
             Console.WriteLine(await page.ContentAsync());
             await page.WaitForSelectorAsync(".select-selected", new()
             {
@@ -47,17 +47,17 @@ public static class CheckGovService
             await page.ClickAsync(".select-selected", new()
             {
                 Timeout = 30000,
-                Force = true // иногда нужно
+                Force = true
             });
             Console.WriteLine($"Кликнули на селектор.");
-            // Поиск и выбор нужного банка
+
             var bankText = GetBankText(bankType);
             Console.WriteLine($"Банк: {bankText}.");
             await page.WaitForSelectorAsync(".selection-list");
             Console.WriteLine($"Выбираем банк");
             await page.ClickAsync($".selection-list div:text('{bankText}')");
             Console.WriteLine($"Выбрали банк");
-            // Ввод кода вручную через JS
+
             Console.WriteLine($"Вставляем код:{code}");
             await page.EvaluateAsync($@"
                 () => {{
@@ -66,14 +66,12 @@ public static class CheckGovService
                     input.dispatchEvent(new Event('input', {{ bubbles: true }}));
                 }}");
 
-            // Ждём разблокировку кнопки и кликаем по ней
             Console.WriteLine($"Ждем разблокировку");
             await Task.Delay(500);
             Console.WriteLine($"Дождались разблокировку");
             Console.WriteLine($"Проверяем");
             await page.EvaluateAsync("document.querySelector('#submit').click()");
 
-            // Ожидаем появления блока результата
             Console.WriteLine($"Ожидаем результат");
             await page.WaitForSelectorAsync("#checkResult", new() { Timeout = 30000 });
             Console.WriteLine($"Получили результат");

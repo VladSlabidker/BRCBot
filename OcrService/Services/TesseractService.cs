@@ -34,7 +34,6 @@ public class TesseractService: IOcrService
         if(cancellationToken.IsCancellationRequested)
             return Task.FromCanceled<Receipt>(cancellationToken).Result;
         
-        // Очистка base64, если с префиксом
         if (base64.Contains(",")) base64 = base64.Split(',')[1];
 
         var imageBytes = Convert.FromBase64String(base64);
@@ -62,22 +61,18 @@ public class TesseractService: IOcrService
     {
         if (string.IsNullOrWhiteSpace(raw))
             return string.Empty;
-
-        // Приводим к нижнему регистру и убираем лишние пробелы
+        
         raw = raw.ToLowerInvariant();
         raw = Regex.Replace(raw, @"\s+", " ").Trim();
         
         raw = Regex.Replace(raw, @"\bmonobank\b", "mono банк", RegexOptions.IgnoreCase);
 
-        // Разделяем слитные слова: приватбанк -> приват банк и банкприват -> приват банк
         raw = Regex.Replace(raw, @"(приват|універсал|власний рахунок|восток|мтб|mtb|mono)(банк)", "$1 банк", RegexOptions.IgnoreCase);
         raw = Regex.Replace(raw, @"(банк)(приват|універсал|власний рахунок|восток|мтб|mtb|mono)", "$2 банк", RegexOptions.IgnoreCase);
-
-        // Переставляем "банк" вправо, если он в начале
+        
         if (raw.StartsWith("банк "))
             raw = raw.Substring(5) + " банк";
-
-        // Возвращаем часть без "банк" и без пробелов - например, "приват", "власнийрахунок"
+        
         string cleanName = raw.Replace(" банк", "").Replace(" ", "");
 
         return cleanName;

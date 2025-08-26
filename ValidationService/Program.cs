@@ -14,7 +14,6 @@ builder.Configuration.AddEnvironmentVariables();
 UriConfig configurationUri = new UriConfig();
 builder.Configuration.GetSection(nameof(UriConfig)).Bind(configurationUri);
 
-// Add services to the container.
 builder.Services.AddGrpc(options =>
 {
     options.Interceptors.Add<ExceptionHandlingInterceptor>();
