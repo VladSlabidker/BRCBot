@@ -93,7 +93,13 @@ public class TelegramUpdateService : ITelegramUpdateService
 
                     var response = await client.PostAsync("api/validation", content);
                     var body = await response.Content.ReadAsStringAsync();
-
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logger.LogWarning("Storefront вернул {StatusCode}: {Body}", response.StatusCode, body);
+                        await _botClient.SendMessage(chatId,
+                            "❌ Произошла ошибка при проверке чека (сервер вернул ошибку). \nПо всем вопросам пишите: @slabidker");
+                        return;
+                    }
                     var result = JsonSerializer.Deserialize<Receipt>(body, new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
