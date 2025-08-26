@@ -38,8 +38,11 @@ jobs:
             echo "REDIS_PORT=6379" >> .env
             echo "RABBITMQ_HOST=rabbitmq" >> .env
             echo "RABBITMQ_PORT=5672" >> .env
-            echo "DB_CONNECTION_STRING=\"Server=sqlserver,1433;User Id=sa;Password=${{ secrets.SA_PASSWORD }};TrustServerCertificate=true;Encrypt=false;\"" >> .env
-
+            echo "SQL_DATASOURCE=sqlserver,1433" >> .env
+            echo "SQL_INITIAL_CATALOG=MyDb" >> .env
+            echo "SQL_USER=sa" >> .env
+            echo "SQL_PASSWORD=${{ secrets.SA_PASSWORD }}" >> .env
+            echo "SQL_TRUST_CERTIFICATE=true" >> .env
 
             docker compose pull || true
             docker compose up -d --build

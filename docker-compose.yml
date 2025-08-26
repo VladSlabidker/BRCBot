@@ -57,10 +57,11 @@ services:
     restart: always
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      SqlExpressConfig__DataSource: sqlserver
-      SqlExpressConfig__InitialCatalog: ReceiptBotDev
-      SqlExpressConfig__IntegratedSecurity: "false"
-      SqlExpressConfig__TrustServerCertificate: "true"
+      SqlExpressConfig__DataSource: ${SQL_DATASOURCE}
+      SqlExpressConfig__InitialCatalog: ${SQL_INITIAL_CATALOG}
+      SqlExpressConfig__UserId: ${SQL_USER}
+      SqlExpressConfig__IntegratedSecurity: ${SQL_INTEGRATED_SECURITY}
+      SqlExpressConfig__TrustServerCertificate: ${}
       SqlExpressConfig__Password: ${SA_PASSWORD}
       ProxyConfig__Server: ${PROXY_SERVER}
       ProxyConfig__User: ${PROXY_USER}

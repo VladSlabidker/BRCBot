@@ -11,4 +11,6 @@ public sealed class SqlExpressConfig
     public bool TrustServerCertificate { get; init; }
     
     public string? Password { get; init; }
+    
+    public string? UserId { get; init; }
 }
