@@ -9,9 +9,9 @@ public static class CheckGovService
     public static async Task<(bool Success, string Message)> ValidateReceiptAsync(BankType bankType, string code)
     {
         const string baseUrl = "https://check.gov.ua";
-        var server = Environment.GetEnvironmentVariable("Server");
-        var user = Environment.GetEnvironmentVariable("User");
-        var pass = Environment.GetEnvironmentVariable("Pass");
+        var server = Environment.GetEnvironmentVariable("ProxyConfig:Server");
+        var user = Environment.GetEnvironmentVariable("ProxyConfig:User");
+        var pass = Environment.GetEnvironmentVariable("ProxyConfig:Pass");
         Console.WriteLine($"Server: {server}, User: {user}, Pass: {pass}");
         
         using var playwright = await Playwright.CreateAsync();
