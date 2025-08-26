@@ -9,9 +9,26 @@ public static class CheckGovService
     public static async Task<(bool Success, string Message)> ValidateReceiptAsync(BankType bankType, string code)
     {
         const string baseUrl = "https://check.gov.ua";
+        var proxy = Environment.GetEnvironmentVariable("PROXY_SERVER");
+        var user = Environment.GetEnvironmentVariable("PROXY_USER");
+        var pass = Environment.GetEnvironmentVariable("PROXY_PASS");
+        Console.WriteLine($"Proxy: {proxy}, User: {user}, Pass: {pass}");
         
         using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync(new() { Headless = true, Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" } });
+        await using var browser = await playwright.Chromium.LaunchAsync(new()
+        {
+            Headless = true, 
+            Args = new[]
+            {
+                "--no-sandbox", "--disable-setuid-sandbox" 
+            },
+            Proxy = new Proxy()
+            {
+                Server = proxy,
+                Username = user,
+                Password = pass
+            }
+        });
         var page = await browser.NewPageAsync();
         Console.WriteLine("Заходим на сайт");
         await page.GotoAsync(baseUrl, new()
