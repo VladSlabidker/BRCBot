@@ -43,6 +43,7 @@ jobs:
             echo "SQL_USER=sa" >> .env
             echo "SQL_PASSWORD=${{ secrets.SA_PASSWORD }}" >> .env
             echo "SQL_TRUST_CERTIFICATE=true" >> .env
+            echo "SQL_INTEGRATED_SECURITY=false" >> .env
 
             docker compose pull || true
             docker compose up -d --build
