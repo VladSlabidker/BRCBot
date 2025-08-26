@@ -35,7 +35,7 @@ public class BotContext: DbContext
                 DataSource = _sqlExpressConfig.DataSource,
                 InitialCatalog = _sqlExpressConfig.InitialCatalog,
                 IntegratedSecurity = false,
-                UserID = _sqlExpressConfig.UserId,
+                UserID = "sa",
                 Password = _sqlExpressConfig.Password,
                 TrustServerCertificate = _sqlExpressConfig.TrustServerCertificate,
                 Encrypt = false
