@@ -22,6 +22,7 @@ builder.Services.AddGrpc(options =>
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<BotContext>();
+builder.Services.Configure<ProxyConfig>(builder.Configuration.GetSection(nameof(ProxyConfig)));
 builder.Services.Configure<SqlExpressConfig>(builder.Configuration.GetSection(nameof(SqlExpressConfig)));
 builder.Services.AddRedisCache(builder.Configuration);
 builder.WebHost.ConfigureKestrel(options =>

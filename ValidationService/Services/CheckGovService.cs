@@ -1,18 +1,15 @@
 using Microsoft.Playwright;
 using Common.Enums;
-using ValidationService.Interfaces;
+using ValidationService.Configs;
 
 namespace ValidationService.Services;
 
 public static class CheckGovService
 {
-    public static async Task<(bool Success, string Message)> ValidateReceiptAsync(BankType bankType, string code)
+    public static async Task<(bool Success, string Message)> ValidateReceiptAsync(BankType bankType, string code, ProxyConfig _proxy)
     {
         const string baseUrl = "https://check.gov.ua";
-        var server = Environment.GetEnvironmentVariable("ProxyConfig:Server");
-        var user = Environment.GetEnvironmentVariable("ProxyConfig:User");
-        var pass = Environment.GetEnvironmentVariable("ProxyConfig:Pass");
-        Console.WriteLine($"Server: {server}, User: {user}, Pass: {pass}");
+        Console.WriteLine($"Server: {_proxy.Server}, User: {_proxy.User}, Pass: {_proxy.Pass}");
         
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new()
@@ -24,9 +21,9 @@ public static class CheckGovService
             },
             Proxy = new Proxy()
             {
-                Server = server,
-                Username = user,
-                Password = pass
+                Server = _proxy.Server,
+                Username = _proxy.User,
+                Password = _proxy.Pass
             }
         });
         var page = await browser.NewPageAsync();

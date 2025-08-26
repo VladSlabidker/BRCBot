@@ -1,8 +1,10 @@
 using Common.Enums;
 using Common.Exceptions;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.Extensions.Options;
 using RpcOcrService;
 using Tesseract;
+using ValidationService.Configs;
 using ValidationService.Interfaces;
 using static RpcOcrService.RpcOcrService;
 using Enum = System.Enum;
@@ -12,10 +14,12 @@ namespace ValidationService.Services;
 public class ValidationService: IValidationService
 {
     private readonly RpcOcrServiceClient _ocrService;
-
-    public ValidationService(RpcOcrServiceClient ocrService)
+    private readonly ProxyConfig _proxy;
+    
+    public ValidationService(RpcOcrServiceClient ocrService, IOptions<ProxyConfig> proxy)
     {
         _ocrService = ocrService;
+        _proxy = proxy.Value;
     }
     
     public async Task<RpcReceipt> ValidateReceiptAsync(string base64String, CancellationToken cancellationToken)
@@ -42,7 +46,7 @@ public class ValidationService: IValidationService
             ?
             await CheckPrivatService.ValidateReceiptAsync((BankType)ocrData.BankId, ocrData.Code)
             :
-            await CheckGovService.ValidateReceiptAsync((BankType)ocrData.BankId, ocrData.Code);
+            await CheckGovService.ValidateReceiptAsync((BankType)ocrData.BankId, ocrData.Code, _proxy);
             
         if(!result.Item1)
             throw new InvalidReceiptException("Receipt was not valid");
