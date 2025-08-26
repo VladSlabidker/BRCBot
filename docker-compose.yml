@@ -62,6 +62,9 @@ services:
       SqlExpressConfig__IntegratedSecurity: "false"
       SqlExpressConfig__TrustServerCertificate: "true"
       SqlExpressConfig__Password: ${SA_PASSWORD}
+      ProxyConfig__Server: ${PROXY_SERVER}
+      ProxyConfig__User: ${PROXY_USER}
+      ProxyConfig__Pass: ${PROXY_PASS}
       UriConfig__OcrService: http://ocrservice:8080
       RedisConfig__Host: redis
       RedisConfig__Port: 6379
