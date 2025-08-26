@@ -35,7 +35,7 @@ public class ValidationController : ControllerBase
         
         Receipt result = _mapper.Map<Receipt>(receipt);
         
-        return Ok(result);
+        return Ok(receipt);
     }
 
 }
