@@ -37,7 +37,8 @@ public class BotContext: DbContext
                 IntegratedSecurity = false,
                 UserID = _sqlExpressConfig.UserId,
                 Password = _sqlExpressConfig.Password,
-                TrustServerCertificate = _sqlExpressConfig.TrustServerCertificate
+                TrustServerCertificate = _sqlExpressConfig.TrustServerCertificate,
+                Encrypt = false
             };
             
             optionsBuilder.UseSqlServer(connectionString.ConnectionString);
