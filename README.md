@@ -16,11 +16,11 @@ Create a Telegram bot that:
 | Service               | Functions                                | Interaction                                               | Technologies / Tools                          |
 |---------------------- |-----------------------------------------|----------------------------------------------------------|-----------------------------------------------|
 | **Common**            | Shared library                           | gRPC Interceptors, Enums, Models, proto files           | C# (.NET)                                     |
-| **Telegram.Gateway**  | API gateway for Telegram (Webhook)       | HTTP with Storefront, Telegram API                       | ASP.NET Core, gRPC                             |
-| **Storefront**        | Controllers for all endpoints            | gRPC with Telegram.Gateway, ValidationService, OcrService | OpenAPI/Swagger                               |
-| **OcrService**        | Interacts with ML OCR model, message queue consumer | gRPC with ValidationService, RabbitMQ with PaddleOcrService | C# (.NET), RabbitMQ                           |
+| **Telegram.Gateway**  | API gateway for Telegram (Webhook)       | HTTP with Storefront, Telegram API                       | ASP.NET Core, HTTP                             |
+| **Storefront**        | Controllers for all endpoints            | gRPC with Telegram.Gateway, ValidationService, OcrService | OpenAPI/Swagger, gRPC                               |
+| **OcrService**        | Interacts with ML OCR model, message queue consumer | gRPC with ValidationService, RabbitMQ with PaddleOcrService | C# (.NET), RabbitMQ, gRPC                           |
 | **PaddleOcrService**  | ML OCR model                             | RabbitMQ with OcrService, Python microservice           | Python, EasyOCR, Fast API, uvicorn                               |
-| **ValidationService** | Receipt verification via websites        | gRPC with OcrService, Redis, EntityFramework Core, PlaywrightSharp | C# (.NET), PlaywrightSharp, EF Core, Redis |
+| **ValidationService** | Receipt verification via websites        | gRPC with OcrService, Redis, EntityFramework Core, PlaywrightSharp | C# (.NET), PlaywrightSharp, EF Core, Redis, gRPC |
 | **Data.SQL**          | Database models, migrations, configurations | EntityFramework Core                                    | Microsoft SQL Server                           |
 | **Data.Cache**        | Cache models and configurations          | Redis Client                                             | Redis                                         |
 
@@ -48,7 +48,7 @@ Create a Telegram bot that:
 ## 4. Deployment
 
 The project is deployed using a VPS with Docker and Docker-Compose, integrated with deployment via `github/workflows/cd.yaml`, and nginx + certbot for TLS.
-
+Bought a Proxy static server in order to access the website https://check.gov.ua
 ---
 
 **Made by:** Vlad Slabidker
